@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  wordpress:
+    image: wordpress:php8.2-apache
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: wootrydb
+    volumes:
+      - wordpress:/var/www/html
+      - ./wp-content:/var/www/html/wp-content  # solo esta carpeta en local
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:8.0
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=256M
+    environment:
+      MYSQL_DATABASE: wootrydb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3307:3306"  # conectar desde DBeaver
+    volumes:
+      - db:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: rootpass
+
+volumes:
+  wordpress:
+  db:
