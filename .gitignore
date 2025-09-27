@@ -1,0 +1,73 @@
+# ==============================
+# WordPress Core
+# ==============================
+/wp-admin/
+/wp-includes/
+/license.txt
+/readme.html
+/wp-config-sample.php
+
+# ==============================
+# Configuración local
+# ==============================
+/wp-config.php
+
+# ==============================
+# Plugins y Themes externos
+# ==============================
+!/wp-content/plugins/*
+!/wp-content/plugins/index.php
+
+
+!/wp-content/themes/index.php
+
+
+# ==============================
+# Subidas (media, cache, etc.)
+# ==============================
+/wp-content/uploads/*
+!/wp-content/uploads/.gitkeep
+
+/wp-content/cache/
+/wp-content/backups/
+/wp-content/upgrade/
+/wp-content/wflogs/
+
+# ==============================
+# Composer y Node
+# ==============================
+/vendor/
+/wp-content/themes/skalTheme/node_modules
+/wp-content/themes/skalTheme/package-lock.json
+/pnpm-lock.yaml
+/yarn.lock
+# ==============================
+# Archivos del build
+# ==============================
+/wp-content/themes/skalTheme/dist/
+/wp-content/themes/skalTheme/build/
+
+# ==============================
+# Logs y temporales
+# ==============================
+*.log
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# ==============================
+# Docker
+# ==============================
+/db_data/
+/wordpress/
+/mysql/
+/phpmyadmin/
+
+# ==============================
+# Otros
+# ==============================
+.env
+.env.local
+.env.*.local

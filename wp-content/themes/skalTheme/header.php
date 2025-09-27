@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+
+<head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+
+    <?php wp_head(); ?>
+</head>
+
+<body <?php body_class(); ?>>
+    <?php wp_body_open(); ?>
+
+    <div id="page" class="site min-h-screen flex flex-col">
+
+        <header id="masthead" class="bg-white shadow-sm border-b border-stone-200">
+            <div class="container mx-auto px-4 py-2 grid grid-cols-3 items-center">
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex justify-start">
+                    <ul class="flex justify-between items-center w-96">
+                        <li><a class="text-lg" href="<?php echo home_url('/'); ?>">Inicio</a></li>
+                        <li><a class="text-lg" href="">Categorías</a></li>
+                        <li><a class="text-lg" href="">Catering</a></li>
+                        <li><a class="text-lg" href="">Contacto</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Hamburger Menu Button -->
+                <div class="md:hidden flex justify-start">
+                    <button id="mobile-menu-button" class="p-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="my-2 flex justify-center">
+                    <a href="<?php echo home_url('/'); ?>">
+                        <img class="w-20 h-20 rounded-full" src="<?php echo get_template_directory_uri(); ?>/assets/images/LogoSkal1.jpeg" alt="Logo Skal 1">
+                    </a>
+                </div>
+                <div class="flex justify-end">
+                    <ul class="flex justify-between items-center">
+                        <li>
+                            <a class="block mr-2" href="<?php echo wp_login_url(); ?>" noreel="noopener">
+                                <svg class="w-10 h-10 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo wc_get_cart_url(); ?>" class="relative" noreel="noopener">
+                                <svg class="w-10 h-10 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
+                                </svg>
+                                <?php if (WC()->cart->get_cart_contents_count() > 0) : ?>
+                                <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                    <?php echo WC()->cart->get_cart_contents_count(); ?>
+                                </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-stone-200">
+                <nav class="container mx-auto px-4 py-4">
+                    <ul class="flex flex-col space-y-3">
+                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="<?php echo home_url('/'); ?>">Inicio</a></li>
+                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="">Categorías</a></li>
+                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="">Catering</a></li>
+                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="">Contacto</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div id="content" class="site-content flex-1">

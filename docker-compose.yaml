@@ -11,6 +11,9 @@ services:
       WORDPRESS_DB_USER: exampleuser
       WORDPRESS_DB_PASSWORD: examplepass
       WORDPRESS_DB_NAME: wootrydb
+      PHP_MEMORY_LIMIT: 512M
+      PHP_UPLOAD_MAX_FILESIZE: 64M
+      PHP_POST_MAX_SIZE: 64M
     volumes:
       - wordpress:/var/www/html
       - ./wp-content:/var/www/html/wp-content  # solo esta carpeta en local

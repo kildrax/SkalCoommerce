@@ -16,26 +16,144 @@ function myshop_setup() {
 
     register_nav_menus( array(
         'primary' => __( 'Primary Menu', 'myshop-tailwind' ),
+        'footer' => __( 'Footer Menu', 'myshop-tailwind' ),
     ) );
 }
 add_action( 'after_setup_theme', 'myshop_setup' );
 
-function myshop_enqueue_assets() {
+// Enqueue scripts and styles
+function myshop_enqueue_scripts() {
+    // Enqueue Tailwind CSS
     $css_file = get_template_directory() . '/assets/css/tailwind.css';
     if ( file_exists( $css_file ) ) {
         wp_enqueue_style( 'myshop-tailwind', get_template_directory_uri() . '/assets/css/tailwind.css', array(), filemtime( $css_file ) );
     }
+    
+    // Enqueue main JavaScript
+    wp_enqueue_script( 'myshop-main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), '1.0.0', true );
+    
+    // Enqueue carousel JavaScript
+    wp_enqueue_script( 'myshop-carousel', get_template_directory_uri() . '/assets/js/carousel.js', array(), '1.0.0', true );
+    
+    // Enqueue cart JavaScript
+    wp_enqueue_script( 'myshop-cart', get_template_directory_uri() . '/assets/js/cart.js', array('jquery'), '1.0.0', true );
+    
+    // Enqueue WooCommerce cart fragments for dynamic cart updates
+    if ( class_exists( 'WooCommerce' ) ) {
+        wp_enqueue_script( 'wc-cart-fragments' );
+    }
+    
+    // Localize script for AJAX - for both main.js and cart.js
+    wp_localize_script( 'myshop-main', 'wc_add_to_cart_params', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce'    => wp_create_nonce( 'wc_add_to_cart_nonce' )
+    ));
+    
+    wp_localize_script( 'myshop-cart', 'wc_add_to_cart_params', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce'    => wp_create_nonce( 'wc_add_to_cart_nonce' )
+    ));
+    
+    // Also localize for cart updates
+    wp_localize_script( 'myshop-main', 'skal_ajax', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce'    => wp_create_nonce( 'skal_ajax_nonce' )
+    ));
+    
+    wp_localize_script( 'myshop-cart', 'skal_ajax', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce'    => wp_create_nonce( 'skal_ajax_nonce' )
+    ));
+}
+add_action( 'wp_enqueue_scripts', 'myshop_enqueue_scripts' );
 
-    // theme style (optional)
-    wp_enqueue_style( 'myshop-style', get_stylesheet_uri(), array('myshop-tailwind'), wp_get_theme()->get('Version') );
+// Enable AJAX add to cart on shop and archive pages
+add_filter( 'woocommerce_loop_add_to_cart_link', 'skal_ajax_add_to_cart_script', 10, 2 );
+function skal_ajax_add_to_cart_script( $html, $product ) {
+    // Add AJAX add to cart class
+    $html = str_replace( 'add_to_cart_button', 'add_to_cart_button ajax_add_to_cart', $html );
+    return $html;
+}
 
-    // main JS
-    $js_file = get_template_directory() . '/assets/js/main.js';
-    if ( file_exists( $js_file ) ) {
-        wp_enqueue_script( 'myshop-main', get_template_directory_uri() . '/assets/js/main.js', array('jquery'), filemtime( $js_file ), true );
+// Add WooCommerce support
+function myshop_add_woocommerce_support() {
+    add_theme_support( 'woocommerce' );
+    add_theme_support( 'wc-product-gallery-zoom' );
+    add_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
+}
+add_action( 'after_setup_theme', 'myshop_add_woocommerce_support' );
+
+// AJAX handler for adding to cart
+function ajax_add_to_cart() {
+    // Verify nonce for security
+    if ( ! wp_verify_nonce( $_POST['nonce'], 'wc_add_to_cart_nonce' ) ) {
+        wp_send_json_error( array( 'message' => 'Security check failed' ) );
+    }
+
+    if ( ! isset( $_POST['product_id'] ) ) {
+        wp_send_json_error( array( 'message' => 'Product ID missing' ) );
+    }
+
+    $product_id = absint( $_POST['product_id'] );
+    $quantity = isset( $_POST['quantity'] ) ? absint( $_POST['quantity'] ) : 1;
+
+    // Check if product exists
+    $product = wc_get_product( $product_id );
+    if ( ! $product ) {
+        wp_send_json_error( array( 'message' => 'Product not found' ) );
+    }
+
+    $passed_validation = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity );
+
+    if ( $passed_validation && WC()->cart->add_to_cart( $product_id, $quantity ) ) {
+        wp_send_json_success( array(
+            'message' => 'Product added to cart successfully',
+            'cart_count' => WC()->cart->get_cart_contents_count(),
+            'product_name' => $product->get_name()
+        ));
+    } else {
+        wp_send_json_error( array(
+            'message' => 'Failed to add product to cart'
+        ));
     }
 }
-add_action( 'wp_enqueue_scripts', 'myshop_enqueue_assets' );
+add_action( 'wp_ajax_woocommerce_add_to_cart', 'ajax_add_to_cart' );
+add_action( 'wp_ajax_nopriv_woocommerce_add_to_cart', 'ajax_add_to_cart' );
+
+// AJAX handler for getting cart count
+function ajax_get_cart_count() {
+    wp_send_json_success( array(
+        'count' => WC()->cart->get_cart_contents_count()
+    ));
+}
+add_action( 'wp_ajax_get_cart_count', 'ajax_get_cart_count' );
+add_action( 'wp_ajax_nopriv_get_cart_count', 'ajax_get_cart_count' );
+
+// Add cart fragments for dynamic cart updates (WooCommerce way)
+function skal_add_to_cart_fragments( $fragments ) {
+    $cart_count = WC()->cart->get_cart_contents_count();
+    
+    if ( $cart_count > 0 ) {
+        $fragments['.cart-count'] = '<span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">' . $cart_count . '</span>';
+    } else {
+        $fragments['.cart-count'] = '';
+    }
+    
+    return $fragments;
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'skal_add_to_cart_fragments' );
+
+// Update cart count after cart actions
+add_action( 'woocommerce_cart_item_removed', 'refresh_cart_count' );
+add_action( 'woocommerce_cart_item_restored', 'refresh_cart_count' );
+add_action( 'woocommerce_after_cart_item_quantity_update', 'refresh_cart_count' );
+
+function refresh_cart_count() {
+    // This function will trigger when cart is updated
+    // The AJAX call will get the fresh count
+}
+
 
 // Enqueue Tailwind also for Gutenberg editor
 add_action( 'enqueue_block_editor_assets', function(){
