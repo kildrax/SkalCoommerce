@@ -30,7 +30,16 @@ function initCarousel(section, carouselIndex) {
     let autoPlayInterval;
     
     function updateCarousel() {
-        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        // Check if desktop (3 cards) or mobile (1 card)
+        const isDesktop = window.innerWidth >= 768;
+        
+        if (isDesktop) {
+            // Desktop: slide by 400px per card
+            track.style.transform = `translateX(-${currentSlide * 400}px)`;
+        } else {
+            // Mobile: slide by 100% (full width)
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
         
         // Update indicators
         indicators.forEach((indicator, index) => {
@@ -46,12 +55,26 @@ function initCarousel(section, carouselIndex) {
     }
     
     function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
+        const isDesktop = window.innerWidth >= 768;
+        const maxSlide = isDesktop ? Math.max(0, slides.length - 3) : slides.length - 1;
+        
+        if (currentSlide < maxSlide) {
+            currentSlide++;
+        } else {
+            currentSlide = 0; // Loop back to start
+        }
         updateCarousel();
     }
     
     function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        const isDesktop = window.innerWidth >= 768;
+        const maxSlide = isDesktop ? Math.max(0, slides.length - 3) : slides.length - 1;
+        
+        if (currentSlide > 0) {
+            currentSlide--;
+        } else {
+            currentSlide = maxSlide; // Loop to end
+        }
         updateCarousel();
     }
     
@@ -126,8 +149,12 @@ function initCarousel(section, carouselIndex) {
         startAutoPlay();
     });
     
-    // Mouse drag support for desktop
+    // Mouse drag support for desktop - DISABLED (only mobile touch works)
     track.addEventListener('mousedown', (e) => {
+        // Disable mouse dragging on desktop
+        const isDesktop = window.innerWidth >= 768;
+        if (isDesktop) return;
+        
         // Don't start dragging if clicking interactive elements
         const target = e.target;
         if (target.closest('button') || target.closest('input') || target.closest('form') || target.closest('a')) {
@@ -183,7 +210,15 @@ function initCarousel(section, carouselIndex) {
         }
     });
     
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        updateCarousel();
+    });
+    
     // Initialize
     updateCarousel();
-    track.style.cursor = 'grab';
+    
+    // Set cursor based on screen size
+    const isDesktop = window.innerWidth >= 768;
+    track.style.cursor = isDesktop ? 'default' : 'grab';
 }
