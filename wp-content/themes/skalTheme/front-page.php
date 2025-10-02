@@ -8,55 +8,26 @@
 
 get_header(); ?>
 
-<main id="main" class="min-h-screen bg-gradient-to-br from-stone-50/30 to-amber-50/40">
+<main id="main" class="py-10 md:pt-0 bg-gradient-to-br from-stone-50/30 to-amber-50/40">
 
-  <section class="flex align-center justify-center w-full sm:h-[calc(100vh-155px)] h-auto py-4">
-    <div class="sm:w-1/2 w-full">
-      <div class="flex flex-col items-center justify-center sm:w-[600px] w-full px-6 m-auto h-full">
-        <h1 class="text-4xl sm:text-6xl font-bold mb-6 text-stone-900">¿Qué es Skal?</h1>
-        <p class="text-xl sm:text-2xl mb-2 text-stone-600">Skål nació como un restaurante, un homenaje al lugar donde estaba y a mis raíces.
-          Con el tiempo, se transformó en un espacio de desarrollo creativo: un taller donde no solo importan las recetas y los productos, sino también la manera de hacer las cosas, siempre con <span class="text-[#7ad7aa] font-bold">manos, magia y propósito.</span></p>
-        <p class="text-xl sm:text-2xl text-stone-600">En Skal no solo elaboramos brownies, tortas o comidas; convertimos nuestros sentimientos en fuente de inspiración para compartir con quienes nos conocen.</p>
+  <?php while (have_posts()) : the_post(); ?>
+    <section class="flex align-center justify-center w-full md:h-[calc(100vh-155px)] h-auto ">
+      <div class="md:w-1/2 w-full">
+        <div class="flex flex-col items-center justify-center md:w-[600px] w-full px-6 m-auto h-full">
+          <h1 class="text-4xl md:text-6xl font-bold mb-6 text-stone-900"><?php the_field('titulo_banner'); ?></h1>
+          <p class="text-xl md:text-2xl mb-2 text-stone-600"><?php the_field('parrafo_banner'); ?></p>
+        </div>
       </div>
-    </div>
-    <img class="sm:w-1/2 object-cover hidden sm:block" src="<?php echo get_template_directory_uri(); ?>/assets/images/LogoSkal2.jpeg" alt="Logo Skal 2">
-  </section>
 
-  <!-- <?php
-        // Categorías que quieres mostrar
-        $categories = ['brownies', 'cakes', 'syrups'];
-
-        foreach ($categories as $cat_slug) :
-          $term = get_term_by('slug', $cat_slug, 'product_cat');
-          if (! $term) continue;
-
-          echo '<section class="mb-16">';
-          echo '<h2 class="text-2xl font-bold mb-4">' . esc_html($term->name) . '</h2>';
-          echo '<p class="text-gray-500 mb-6">' . esc_html($term->description) . '</p>';
-
-          $products = wc_get_products([
-            'status' => 'publish',
-            'limit'  => 3,
-            'category' => [$cat_slug],
-          ]);
-
-          if ($products) {
-            echo '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
-            foreach ($products as $product) {
-              wc_get_template_part('content', 'product', ['product' => $product]);
-            }
-            echo '</div>';
-          }
-          echo '</section>';
-
-        endforeach;
-        ?> -->
+      <img class="md:w-1/2 object-cover hidden md:block" src="<?php the_field('imagen_banner'); ?>" />
+    </section>
+  <?php endwhile; ?>
 
   <!-- Brownies -->
-  <section class="container mx-auto p-4">
+  <section class="container mx-auto p-4 mt-8 max-w-7xl">
     <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Brownies</h2>
     <!-- Carousel Container -->
-    <div class="relative max-w-4xl mx-auto">
+    <div class="relative mx-auto">
       <!-- Carousel Wrapper -->
       <div class="carousel-container overflow-hidden rounded-lg bg-white">
         <div class="carousel-track flex transition-transform duration-300 ease-in-out " id="carouselTrack">
@@ -278,8 +249,8 @@ get_header(); ?>
     </div>
   </section>
 
-    <!-- Tortas -->
-    <section class="container mx-auto p-4">
+  <!-- Tortas -->
+  <section class="container mx-auto p-4">
     <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Tortas</h2>
     <!-- Carousel Container -->
     <div class="relative max-w-4xl mx-auto">
@@ -390,6 +361,26 @@ get_header(); ?>
 
     </div>
   </section>
+
+  <!-- Eventos -->
+  <?php while (have_posts()) : the_post(); ?>
+  <section class="p-8 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 border-0 w-[90%] mx-auto mt-12 max-w-7xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div class="text-white">
+        <h3 class="text-3xl mb-4 font-roboto font-medium"><?php the_field('titulo_principal_catering'); ?></h3>
+        <p class="text-lg mb-6 text-stone-200 font-sans"><?php the_field('parrafo_de_texto_catering'); ?></p>
+        <a href="https://wa.me/+<?php the_field('numero_de_telefono_catering'); ?>" target="_blank" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-all h-9 px-4 py-2 bg-white text-stone-800 hover:bg-stone-50 text-lg">
+          <svg class="w-6 h-6 text-stone-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17.0896 13.371 1.1431 1.1439c.1745.1461.3148.3287.4111.5349.0962.2063.1461.4312.1461.6588 0 .2276-.0499.4525-.1461.6587-.0963.2063-.4729.6251-.6473.7712-3.1173 3.1211-6.7739 1.706-9.90477-1.4254-3.13087-3.1313-4.54323-6.7896-1.41066-9.90139.62706-.61925 1.71351-1.14182 2.61843-.23626l1.1911 1.19193c1.1911 1.19194.3562 1.93533-.4926 2.80371-.92477.92481-.65643 1.72741 0 2.38391l1.8713 1.8725c.3159.3161.7443.4936 1.191.4936.4468 0 .8752-.1775 1.1911-.4936.8624-.8261 1.6952-1.6004 2.8382-.4565ZM14 8.98134l5.0225-4.98132m0 0L15.9926 4m3.0299.00002v2.98135" />
+          </svg>
+          WhatsApp</a>
+      </div>
+      <div class="h-36 md:h-80">
+        <img class="rounded-lg w-full h-full object-cover" src="<?php the_field('imagen_principal_catering'); ?>" alt="Imagen Eventos">
+      </div>
+    </div>
+  </section>
+  <?php endwhile; ?>
 </main>
 
 <?php get_footer(); ?>

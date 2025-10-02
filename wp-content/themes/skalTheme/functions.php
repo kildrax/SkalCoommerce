@@ -179,3 +179,30 @@ function myshop_wc_wrapper_end() {
 
 add_action( 'woocommerce_before_main_content', 'myshop_wc_wrapper_start', 10 );
 add_action( 'woocommerce_after_main_content', 'myshop_wc_wrapper_end', 10 );
+
+// Add custom admin menu
+function skal_add_admin_menu() {
+    add_menu_page(
+        'Administration',           // Page title
+        'Administration',           // Menu title
+        'manage_options',           // Capability required
+        'skal-administration',      // Menu slug
+        'skal_administration_page', // Callback function
+        'dashicons-admin-generic',  // Icon (you can change this)
+        3                          // Position (3 = below Dashboard)
+    );
+}
+add_action( 'admin_menu', 'skal_add_admin_menu' );
+
+// Callback function for the admin page
+function skal_administration_page() {
+    ?>
+    <div class="wrap">
+        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+        <div class="skal-admin-content">
+            <p>Welcome to the Skal Administration panel.</p>
+            <!-- Add your custom admin content here -->
+        </div>
+    </div>
+    <?php
+}

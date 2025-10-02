@@ -5,3 +5,9 @@ Author:      Kildrax
 Version:     1.0
 Text Domain: skal-theme
 */
+
+@import "tailwindcss";
+
+@theme {
+  --font-roboto: 'Roboto', sans-serif;
+} 

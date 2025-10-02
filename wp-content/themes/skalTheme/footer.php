@@ -15,22 +15,6 @@
                     </p>
                 </div>
 
-                <!-- Quick Links -->
-                <div class="footer-links">
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                    <?php
-                    wp_nav_menu( array(
-                        'theme_location' => 'footer',
-                        'menu_id'        => 'footer-menu',
-                        'container'      => false,
-                        'menu_class'     => 'space-y-2',
-                        'link_before'    => '<span class="text-gray-300 hover:text-white transition-colors block">',
-                        'link_after'     => '</span>',
-                        'fallback_cb'    => false,
-                    ) );
-                    ?>
-                </div>
-
                 <!-- Contact Info -->
                 <div class="footer-contact">
                     <h3 class="text-lg font-semibold mb-4">Contact</h3>
@@ -59,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+            <div class="border-t border-gray-700 mt-8 pt-4 text-center">
                 <p class="text-gray-400">
                     &copy; <?php echo date('Y'); ?> <?php bloginfo( 'name' ); ?>. All rights reserved.
                 </p>

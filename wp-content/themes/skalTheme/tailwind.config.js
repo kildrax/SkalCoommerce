@@ -22,6 +22,7 @@ module.exports = {
       fontFamily: {
         // Add custom fonts if needed
         'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'roboto': ['Roboto', 'sans-serif'], 
       }
     },
   },

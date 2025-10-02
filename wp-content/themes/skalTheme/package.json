@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --watch",
-    "build-prod": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --minify",
-    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/tailwind.css --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --watch",
+    "build-prod": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --minify",
+    "dev": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --watch"
   },
-  "keywords": ["wordpress", "theme", "tailwindcss"],
+  "keywords": [
+    "wordpress",
+    "theme",
+    "tailwindcss"
+  ],
   "author": "Kildrax",
   "license": "ISC",
   "description": "WordPress theme with TailwindCSS for Skal Commerce",

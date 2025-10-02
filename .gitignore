@@ -15,7 +15,7 @@
 # ==============================
 # Plugins y Themes externos
 # ==============================
-!/wp-content/plugins/*
+/wp-content/plugins/*
 !/wp-content/plugins/index.php
 
 

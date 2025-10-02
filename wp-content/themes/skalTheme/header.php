@@ -5,7 +5,9 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="profile" href="https://gmpg.org/xfn/11">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <?php wp_head(); ?>
 </head>
 
@@ -19,13 +21,13 @@
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex justify-start">
                     <ul class="flex justify-between items-center w-96">
-                        <li><a class="text-lg" href="<?php echo home_url('/'); ?>">Inicio</a></li>
-                        <li><a class="text-lg" href="">Categorías</a></li>
-                        <li><a class="text-lg" href="">Catering</a></li>
-                        <li><a class="text-lg" href="">Contacto</a></li>
+                        <li><a class="text-lg font-roboto" href="<?php echo home_url('/'); ?>">Inicio</a></li>
+                        <li><a class="text-lg font-roboto" href="">Categorías</a></li>
+                        <li><a class="text-lg font-roboto" href="">Catering</a></li>
+                        <li><a class="text-lg font-roboto" href="">Contacto</a></li>
                     </ul>
                 </nav>
-                
+
                 <!-- Mobile Hamburger Menu Button -->
                 <div class="md:hidden flex justify-start">
                     <button id="mobile-menu-button" class="p-2 text-gray-700 hover:text-gray-900 focus:outline-none">
@@ -54,16 +56,16 @@
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
                                 </svg>
                                 <?php if (WC()->cart->get_cart_contents_count() > 0) : ?>
-                                <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                                    <?php echo WC()->cart->get_cart_contents_count(); ?>
-                                </span>
+                                    <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                                        <?php echo WC()->cart->get_cart_contents_count(); ?>
+                                    </span>
                                 <?php endif; ?>
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
-            
+
             <!-- Mobile Navigation Menu -->
             <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-stone-200">
                 <nav class="container mx-auto px-4 py-4">
