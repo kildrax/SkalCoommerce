@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initQuantitySelectors();
     initAjaxAddToCart();
     initCartPageUpdates();
+    initCartQuantityButtons();
+    initRemoveFromCart();
     
 });
 
@@ -264,4 +266,212 @@ if (typeof showNotification === 'undefined') {
             }, 300);
         }, 5000);
     }
+}
+
+/**
+ * Initialize cart page quantity buttons (+/-)
+ */
+function initCartQuantityButtons() {
+    console.log('Initializing cart quantity buttons...');
+    
+    const decreaseButtons = document.querySelectorAll('.qty-decrease');
+    const increaseButtons = document.querySelectorAll('.qty-increase');
+    const qtyInputs = document.querySelectorAll('.qty-input');
+    
+    console.log('Found decrease buttons:', decreaseButtons.length);
+    console.log('Found increase buttons:', increaseButtons.length);
+    console.log('Found qty inputs:', qtyInputs.length);
+    
+    // Handle decrease button
+    decreaseButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('Decrease button clicked!');
+            e.preventDefault();
+            
+            const cartKey = this.getAttribute('data-cart-key');
+            const input = document.querySelector(`.qty-input[data-cart-key="${cartKey}"]`);
+            
+            console.log('Cart key:', cartKey);
+            console.log('Input found:', input);
+            
+            if (input) {
+                let value = parseInt(input.value);
+                const min = parseInt(input.getAttribute('min')) || 0;
+                
+                console.log('Current value:', value, 'Min:', min);
+                
+                if (value > min) {
+                    input.value = value - 1;
+                    console.log('New value:', input.value);
+                    
+                    // Trigger input event to notify WooCommerce
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    
+                    showUpdateButton();
+                    
+                    // Auto-submit if quantity reaches 0
+                    if (input.value == 0) {
+                        setTimeout(() => {
+                            document.querySelector('.woocommerce-cart-form').submit();
+                        }, 300);
+                    }
+                }
+            }
+        });
+    });
+    
+    // Handle increase button
+    increaseButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('Increase button clicked!');
+            e.preventDefault();
+            
+            const cartKey = this.getAttribute('data-cart-key');
+            const input = document.querySelector(`.qty-input[data-cart-key="${cartKey}"]`);
+            
+            console.log('Cart key:', cartKey);
+            console.log('Input found:', input);
+            
+            if (input) {
+                let value = parseInt(input.value);
+                const max = parseInt(input.getAttribute('max')) || 999;
+                
+                console.log('Current value:', value, 'Max:', max);
+                
+                if (value < max) {
+                    input.value = value + 1;
+                    console.log('New value:', input.value);
+                    
+                    // Trigger input event to notify WooCommerce
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    
+                    showUpdateButton();
+                }
+            }
+        });
+    });
+    
+    // Handle manual input changes
+    document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', function() {
+            showUpdateButton();
+        });
+    });
+}
+
+/**
+ * Show the update cart button when quantity changes
+ */
+function showUpdateButton() {
+    console.log('Showing update button...');
+    const updateBtn = document.querySelector('.update-cart-btn');
+    console.log('Update button found:', updateBtn);
+    
+    if (updateBtn) {
+        updateBtn.classList.remove('hidden');
+        updateBtn.removeAttribute('disabled'); // Remove disabled attribute
+        updateBtn.disabled = false; // Ensure it's enabled
+        console.log('Update button is now visible and enabled');
+        
+        // Ensure the button submits the form when clicked
+        if (!updateBtn.hasAttribute('data-listener-added')) {
+            updateBtn.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent default to debug
+                console.log('Update cart button clicked!');
+                
+                const form = document.querySelector('.woocommerce-cart-form');
+                console.log('Form found:', form);
+                
+                if (form) {
+                    // Check all qty inputs before submitting
+                    const qtyInputs = form.querySelectorAll('input[name*="[qty]"]');
+                    console.log('Found qty inputs:', qtyInputs.length);
+                    
+                    qtyInputs.forEach(input => {
+                        console.log(`Input name: ${input.name}, value: ${input.value}, type: ${typeof input.value}`);
+                    });
+                    
+                    // Log all form data before submitting
+                    const formData = new FormData(form);
+                    console.log('Form data being submitted:');
+                    for (let [key, value] of formData.entries()) {
+                        console.log(`${key}: ${value} (type: ${typeof value})`);
+                    }
+                    
+                    console.log('Submitting form...');
+                    form.submit();
+                } else {
+                    console.error('Form not found!');
+                }
+            });
+            updateBtn.setAttribute('data-listener-added', 'true');
+        }
+    } else {
+        console.error('Update button not found!');
+    }
+}
+
+/**
+ * Initialize remove from cart buttons
+ */
+function initRemoveFromCart() {
+    console.log('Initializing remove from cart buttons...');
+    
+    const removeButtons = document.querySelectorAll('.remove-from-cart');
+    console.log('Found remove buttons:', removeButtons.length);
+    
+    removeButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Remove button clicked!');
+            
+            const cartKey = this.getAttribute('data-cart-key');
+            console.log('Cart key to remove:', cartKey);
+            
+            if (!cartKey) {
+                console.error('No cart key found!');
+                return;
+            }
+            
+            // Get the remove URL from WooCommerce
+            const removeUrl = wc_cart_params && wc_cart_params.wc_ajax_url 
+                ? wc_cart_params.wc_ajax_url.toString().replace('%%endpoint%%', 'remove_from_cart')
+                : window.location.origin + '/?wc-ajax=remove_from_cart';
+            
+            console.log('Remove URL:', removeUrl);
+            
+            // Show confirmation
+            if (confirm('¿Estás seguro de que quieres eliminar este producto del carrito?')) {
+                console.log('User confirmed removal');
+                
+                // Simply redirect to the remove URL with the cart item key
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.set('remove_item', cartKey);
+                currentUrl.searchParams.set('_wpnonce', getWooCommerceNonce());
+                
+                console.log('Redirecting to:', currentUrl.toString());
+                window.location.href = currentUrl.toString();
+            } else {
+                console.log('User cancelled removal');
+            }
+        });
+    });
+}
+
+/**
+ * Get WooCommerce nonce from the page
+ */
+function getWooCommerceNonce() {
+    const nonceInput = document.querySelector('input[name="woocommerce-cart-nonce"]');
+    if (nonceInput) {
+        return nonceInput.value;
+    }
+    
+    // Fallback: try to get from WooCommerce params
+    if (typeof wc_cart_params !== 'undefined' && wc_cart_params.nonce) {
+        return wc_cart_params.nonce;
+    }
+    
+    console.error('Could not find WooCommerce nonce!');
+    return '';
 }

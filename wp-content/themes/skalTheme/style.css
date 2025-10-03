@@ -22,4 +22,133 @@ input[type="number"]::-webkit-outer-spin-button {
 /* Quitar flechas en Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ==============================
+   WooCommerce Notices Styling
+   ============================== */
+
+/* Container for all notices */
+.woocommerce-notices-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+/* Base notice styles */
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error {
+  position: relative;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border-left: 4px solid;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Success message (item removed, etc.) */
+.woocommerce-message {
+  background-color: #ecfdf5;
+  border-left-color: #10b981;
+  color: #065f46;
+}
+
+.woocommerce-message::before {
+  content: "✓";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: #10b981;
+  color: white;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Info message */
+.woocommerce-info {
+  background-color: #eff6ff;
+  border-left-color: #3b82f6;
+  color: #1e40af;
+}
+
+.woocommerce-info::before {
+  content: "i";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Error message */
+.woocommerce-error {
+  background-color: #fef2f2;
+  border-left-color: #ef4444;
+  color: #991b1b;
+}
+
+.woocommerce-error::before {
+  content: "✕";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: #ef4444;
+  color: white;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Links inside notices */
+.woocommerce-message a,
+.woocommerce-info a,
+.woocommerce-error a {
+  color: inherit;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.woocommerce-message a:hover {
+  color: #047857;
+}
+
+.woocommerce-info a:hover {
+  color: #1d4ed8;
+}
+
+.woocommerce-error a:hover {
+  color: #7f1d1d;
+}
+
+/* Undo link styling */
+.woocommerce-message .restore-item {
+  margin-left: auto;
+  padding: 0.25rem 0.75rem;
+  background-color: white;
+  border: 1px solid #10b981;
+  border-radius: 0.375rem;
+  color: #10b981;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.woocommerce-message .restore-item:hover {
+  background-color: #10b981;
+  color: white;
 }

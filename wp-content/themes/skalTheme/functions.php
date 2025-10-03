@@ -67,6 +67,9 @@ function myshop_enqueue_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'myshop_enqueue_scripts' );
 
+// Disable WooCommerce default styles to prevent conflicts with Tailwind
+add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+
 // Enable AJAX add to cart on shop and archive pages
 add_filter( 'woocommerce_loop_add_to_cart_link', 'skal_ajax_add_to_cart_script', 10, 2 );
 function skal_ajax_add_to_cart_script( $html, $product ) {
@@ -206,3 +209,62 @@ function skal_administration_page() {
     </div>
     <?php
 }
+
+/**
+ * Translate WooCommerce messages to Spanish
+ */
+function skal_translate_woocommerce_messages( $translated, $text, $domain ) {
+    if ( $domain === 'woocommerce' ) {
+        $translations = array(
+            'removed.' => 'eliminado.',
+            'Undo?' => 'Deshacer?',
+            'Update cart' => 'Actualizar carrito',
+            'Apply coupon' => 'Aplicar cupón',
+            'Coupon code' => 'Código de cupón',
+            'Coupon:' => 'Cupón:',
+            'Remove this item' => 'Eliminar este artículo',
+            'Product' => 'Producto',
+            'Price' => 'Precio',
+            'Quantity' => 'Cantidad',
+            'Subtotal' => 'Subtotal',
+            'Total' => 'Total',
+        );
+        
+        if ( isset( $translations[ $text ] ) ) {
+            return $translations[ $text ];
+        }
+    }
+    
+    return $translated;
+}
+add_filter( 'gettext', 'skal_translate_woocommerce_messages', 20, 3 );
+
+/**
+ * Force WooCommerce template for cart page
+ */
+function skal_force_woocommerce_template( $template ) {
+    if ( is_page() ) {
+        $page_id = get_queried_object_id();
+        $cart_page_id = wc_get_page_id( 'cart' );
+        $checkout_page_id = wc_get_page_id( 'checkout' );
+        
+        // If this is the cart page, use woocommerce.php
+        if ( $page_id == $cart_page_id ) {
+            $woo_template = locate_template( 'woocommerce.php' );
+            if ( $woo_template ) {
+                return $woo_template;
+            }
+        }
+        
+        // If this is the checkout page, use woocommerce.php
+        if ( $page_id == $checkout_page_id ) {
+            $woo_template = locate_template( 'woocommerce.php' );
+            if ( $woo_template ) {
+                return $woo_template;
+            }
+        }
+    }
+    
+    return $template;
+}
+add_filter( 'template_include', 'skal_force_woocommerce_template', 99 );
