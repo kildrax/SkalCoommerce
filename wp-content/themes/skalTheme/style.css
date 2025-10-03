@@ -31,7 +31,7 @@ input[type="number"] {
 
 /* Container for all notices */
 .woocommerce-notices-wrapper {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0rem;
 }
 
 /* Base notice styles */

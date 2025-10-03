@@ -119,7 +119,7 @@ do_action('woocommerce_before_cart');
 						<div class="p-6">
 							<div class="flex items-center justify-between text-xl">
 								<span class="text-stone-900">Total:</span>
-								<span class="text-teal-700">$ 178.000</span>
+								<span class="text-teal-700"><?php echo WC()->cart->get_cart_total(); ?></span>
 							</div>
 							<div class="h-px w-full bg-stone-200 my-4"></div>
 							<button class="w-full h-10 rounded-md px-6 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium transition-all">
