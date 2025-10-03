@@ -7,7 +7,7 @@ do_action('woocommerce_before_cart');
 <div class="custom-cart-container">
 	<?php if (WC()->cart->is_empty()) : ?>
 		<!-- Empty cart message -->
-		<div class="container mx-auto p-4 mt-4 max-w-4xl">
+		<div class="container mx-auto p-4 py-12 max-w-4xl">
 			<div class="text-center py-12">
 				<svg class="mx-auto h-24 w-24 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -23,7 +23,7 @@ do_action('woocommerce_before_cart');
 		<form class="woocommerce-cart-form" action="<?php echo esc_url(wc_get_cart_url()); ?>" method="post">
 			<?php do_action('woocommerce_before_cart_table'); ?>
 			<section class="">
-				<div class="container mx-auto p-4 mt-4 max-w-4xl">
+				<div class="container mx-auto p-4 py-12 max-w-4xl">
 
 					<?php
 					// Loop through cart items
