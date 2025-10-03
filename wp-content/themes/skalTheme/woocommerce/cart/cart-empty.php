@@ -17,11 +17,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/*
- * @hooked wc_empty_cart_message - 10
- */
-do_action( 'woocommerce_cart_is_empty' );
-
 if ( wc_get_page_id( 'shop' ) > 0 ) : ?>
 		<div class="container mx-auto p-4 py-12 max-w-4xl">
 			<div class="text-center py-12">
@@ -30,7 +25,7 @@ if ( wc_get_page_id( 'shop' ) > 0 ) : ?>
 				</svg>
 				<h2 class="mt-6 text-2xl font-semibold text-stone-900">Tu carrito está vacío</h2>
 				<p class="mt-2 text-stone-600">Agrega algunos productos para comenzar tu compra.</p>
-				<a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="mt-6 inline-block px-6 py-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors">
+				<a href="<?php echo esc_url(home_url('/')); ?>" class="mt-6 inline-block px-6 py-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors">
 					Ir a la tienda
 				</a>
 			</div>
