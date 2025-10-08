@@ -270,10 +270,10 @@ if (typeof showNotification === 'undefined') {
 }
 
 /**
- * Initialize cart page quantity buttons (+/-)
+ * Initialize cart page quantity buttons (+/-) with AJAX
  */
 function initCartQuantityButtons() {
-    console.log('Initializing cart quantity buttons...');
+    console.log('Initializing cart quantity buttons with AJAX...');
     
     const decreaseButtons = document.querySelectorAll('.qty-decrease');
     const increaseButtons = document.querySelectorAll('.qty-increase');
@@ -286,36 +286,21 @@ function initCartQuantityButtons() {
     // Handle decrease button
     decreaseButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            console.log('Decrease button clicked!');
             e.preventDefault();
             
             const cartKey = this.getAttribute('data-cart-key');
             const input = document.querySelector(`.qty-input[data-cart-key="${cartKey}"]`);
             
-            console.log('Cart key:', cartKey);
-            console.log('Input found:', input);
-            
             if (input) {
                 let value = parseInt(input.value);
                 const min = parseInt(input.getAttribute('min')) || 0;
                 
-                console.log('Current value:', value, 'Min:', min);
-                
                 if (value > min) {
-                    input.value = value - 1;
-                    console.log('New value:', input.value);
+                    const newValue = value - 1;
+                    input.value = newValue;
                     
-                    // Trigger input event to notify WooCommerce
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                    
-                    showUpdateButton();
-                    
-                    // Auto-submit if quantity reaches 0
-                    if (input.value == 0) {
-                        setTimeout(() => {
-                            document.querySelector('.woocommerce-cart-form').submit();
-                        }, 300);
-                    }
+                    // Update cart via AJAX
+                    updateCartQuantityAjax(cartKey, newValue);
                 }
             }
         });
@@ -324,92 +309,167 @@ function initCartQuantityButtons() {
     // Handle increase button
     increaseButtons.forEach(button => {
         button.addEventListener('click', function(e) {
-            console.log('Increase button clicked!');
             e.preventDefault();
             
             const cartKey = this.getAttribute('data-cart-key');
             const input = document.querySelector(`.qty-input[data-cart-key="${cartKey}"]`);
             
-            console.log('Cart key:', cartKey);
-            console.log('Input found:', input);
-            
             if (input) {
                 let value = parseInt(input.value);
                 const max = parseInt(input.getAttribute('max')) || 999;
                 
-                console.log('Current value:', value, 'Max:', max);
-                
                 if (value < max) {
-                    input.value = value + 1;
-                    console.log('New value:', input.value);
+                    const newValue = value + 1;
+                    input.value = newValue;
                     
-                    // Trigger input event to notify WooCommerce
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                    
-                    showUpdateButton();
+                    // Update cart via AJAX
+                    updateCartQuantityAjax(cartKey, newValue);
                 }
             }
         });
     });
     
-    // Handle manual input changes
-    document.querySelectorAll('.qty-input').forEach(input => {
+    // Handle manual input changes with debounce
+    let debounceTimer;
+    qtyInputs.forEach(input => {
         input.addEventListener('change', function() {
-            showUpdateButton();
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const cartKey = this.getAttribute('data-cart-key');
+                const newValue = parseInt(this.value) || 0;
+                updateCartQuantityAjax(cartKey, newValue);
+            }, 500);
         });
     });
 }
 
 /**
- * Show the update cart button when quantity changes
+ * Update cart quantity via AJAX
  */
-function showUpdateButton() {
-    console.log('Showing update button...');
-    const updateBtn = document.querySelector('.update-cart-btn');
-    console.log('Update button found:', updateBtn);
+function updateCartQuantityAjax(cartKey, quantity) {
+    console.log('Updating cart via AJAX:', cartKey, quantity);
     
-    if (updateBtn) {
-        updateBtn.classList.remove('hidden');
-        updateBtn.removeAttribute('disabled'); // Remove disabled attribute
-        updateBtn.disabled = false; // Ensure it's enabled
-        console.log('Update button is now visible and enabled');
-        
-        // Ensure the button submits the form when clicked
-        if (!updateBtn.hasAttribute('data-listener-added')) {
-            updateBtn.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent default to debug
-                console.log('Update cart button clicked!');
-                
-                const form = document.querySelector('.woocommerce-cart-form');
-                console.log('Form found:', form);
-                
-                if (form) {
-                    // Check all qty inputs before submitting
-                    const qtyInputs = form.querySelectorAll('input[name*="[qty]"]');
-                    console.log('Found qty inputs:', qtyInputs.length);
-                    
-                    qtyInputs.forEach(input => {
-                        console.log(`Input name: ${input.name}, value: ${input.value}, type: ${typeof input.value}`);
-                    });
-                    
-                    // Log all form data before submitting
-                    const formData = new FormData(form);
-                    console.log('Form data being submitted:');
-                    for (let [key, value] of formData.entries()) {
-                        console.log(`${key}: ${value} (type: ${typeof value})`);
-                    }
-                    
-                    console.log('Submitting form...');
-                    form.submit();
-                } else {
-                    console.error('Form not found!');
-                }
-            });
-            updateBtn.setAttribute('data-listener-added', 'true');
-        }
-    } else {
-        console.error('Update button not found!');
+    const ajaxUrl = getAjaxUrl();
+    const nonce = getWooCommerceNonce();
+    
+    // Show loading state
+    const input = document.querySelector(`.qty-input[data-cart-key="${cartKey}"]`);
+    if (input) {
+        input.disabled = true;
+        input.style.opacity = '0.5';
     }
+    
+    const formData = new URLSearchParams({
+        action: 'update_cart_quantity',
+        cart_key: cartKey,
+        quantity: quantity,
+        nonce: nonce
+    });
+    
+    fetch(ajaxUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Cart update response:', data);
+        
+        if (data.success) {
+            // Update cart counter in header
+            updateCartCount();
+            
+            // Update subtotal for this item (the one in the product card)
+            if (data.data.subtotal) {
+                // Find the product card container
+                const productCard = input.closest('.rounded-xl.border.border-stone-200');
+                if (productCard) {
+                    // Find the subtotal span within this specific product card
+                    // Look for the div with "Subtotal" text, then get the next span
+                    const subtotalContainer = productCard.querySelector('.flex.flex-col.items-end.justify-end');
+                    if (subtotalContainer) {
+                        const subtotalElement = subtotalContainer.querySelector('span.text-lg.text-stone-900');
+                        if (subtotalElement) {
+                            subtotalElement.innerHTML = data.data.subtotal;
+                            console.log('Subtotal updated to:', data.data.subtotal);
+                        } else {
+                            console.error('Subtotal span not found');
+                        }
+                    } else {
+                        console.error('Subtotal container not found');
+                    }
+                } else {
+                    console.error('Product card not found');
+                }
+            }
+            
+            // Update cart total (the one in the teal box at the bottom)
+            if (data.data.cart_total) {
+                // Find the total in the teal box specifically
+                const totalBox = document.querySelector('.border-teal-200.bg-teal-50');
+                if (totalBox) {
+                    const totalElement = totalBox.querySelector('.text-teal-700');
+                    if (totalElement) {
+                        totalElement.innerHTML = data.data.cart_total;
+                    }
+                }
+            }
+            
+            // Also update the cart count badge
+            if (data.data.cart_count !== undefined) {
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = data.data.cart_count;
+                    
+                    // Show/hide badge based on count
+                    if (data.data.cart_count > 0) {
+                        element.classList.remove('hidden');
+                    } else {
+                        element.classList.add('hidden');
+                    }
+                });
+            }
+            
+            // If quantity is 0, remove the item from view
+            if (quantity === 0) {
+                const productCard = input.closest('.rounded-xl');
+                if (productCard) {
+                    productCard.style.transition = 'opacity 0.3s';
+                    productCard.style.opacity = '0';
+                    setTimeout(() => {
+                        productCard.remove();
+                        
+                        // Check if cart is empty
+                        const remainingItems = document.querySelectorAll('.qty-input').length;
+                        if (remainingItems === 0) {
+                            window.location.reload();
+                        }
+                    }, 300);
+                }
+            }
+            
+            showNotification('Carrito actualizado', 'success');
+        } else {
+            showNotification(data.data.message || 'Error al actualizar el carrito', 'error');
+            // Revert the input value
+            if (input && data.data.old_quantity) {
+                input.value = data.data.old_quantity;
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error updating cart:', error);
+        showNotification('Error al actualizar el carrito', 'error');
+    })
+    .finally(() => {
+        // Remove loading state
+        if (input) {
+            input.disabled = false;
+            input.style.opacity = '1';
+        }
+    });
 }
 
 /**
@@ -535,6 +595,9 @@ function initOrderPopup() {
             // Disable button and show loading
             submitButton.disabled = true;
             submitButton.textContent = 'Procesando...';
+            submitButton.style.opacity = '0.6';
+            submitButton.style.cursor = 'not-allowed';
+            submitButton.classList.add('pointer-events-none');
             
             // Get form data
             const formData = new FormData(orderForm);
@@ -589,6 +652,9 @@ function initOrderPopup() {
                     // Re-enable button
                     submitButton.disabled = false;
                     submitButton.textContent = originalText;
+                    submitButton.style.opacity = '1';
+                    submitButton.style.cursor = 'pointer';
+                    submitButton.classList.remove('pointer-events-none');
                 }
             })
             .catch(error => {
@@ -598,6 +664,9 @@ function initOrderPopup() {
                 // Re-enable button
                 submitButton.disabled = false;
                 submitButton.textContent = originalText;
+                submitButton.style.opacity = '1';
+                submitButton.style.cursor = 'pointer';
+                submitButton.classList.remove('pointer-events-none');
             });
         });
     }

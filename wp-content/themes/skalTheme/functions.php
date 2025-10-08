@@ -460,6 +460,64 @@ add_action( 'wp_ajax_process_custom_order', 'skal_process_custom_order' );
 add_action( 'wp_ajax_nopriv_process_custom_order', 'skal_process_custom_order' );
 
 // ============================================
+// AJAX UPDATE CART QUANTITY
+// ============================================
+function skal_update_cart_quantity_ajax() {
+    // Verify nonce
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'woocommerce-cart' ) ) {
+        wp_send_json_error( array( 'message' => 'Security check failed' ) );
+    }
+
+    if ( ! isset( $_POST['cart_key'] ) || ! isset( $_POST['quantity'] ) ) {
+        wp_send_json_error( array( 'message' => 'Missing required parameters' ) );
+    }
+
+    $cart_key = sanitize_text_field( $_POST['cart_key'] );
+    $quantity = intval( $_POST['quantity'] );
+
+    // Get cart
+    $cart = WC()->cart->get_cart();
+
+    if ( ! isset( $cart[ $cart_key ] ) ) {
+        wp_send_json_error( array( 'message' => 'Item not found in cart' ) );
+    }
+
+    $old_quantity = $cart[ $cart_key ]['quantity'];
+
+    // Update quantity
+    if ( $quantity > 0 ) {
+        WC()->cart->set_quantity( $cart_key, $quantity, true );
+    } else {
+        // Remove item if quantity is 0
+        WC()->cart->remove_cart_item( $cart_key );
+    }
+
+    // Calculate totals
+    WC()->cart->calculate_totals();
+
+    // Get updated values
+    $product = wc_get_product( $cart[ $cart_key ]['product_id'] );
+    $subtotal = '';
+    
+    if ( $quantity > 0 && $product ) {
+        $subtotal = WC()->cart->get_product_subtotal( $product, $quantity );
+    }
+
+    $cart_total = WC()->cart->get_cart_total();
+    $cart_count = WC()->cart->get_cart_contents_count();
+
+    wp_send_json_success( array(
+        'message' => 'Cart updated successfully',
+        'subtotal' => $subtotal,
+        'cart_total' => $cart_total,
+        'cart_count' => $cart_count,
+        'old_quantity' => $old_quantity
+    ) );
+}
+add_action( 'wp_ajax_update_cart_quantity', 'skal_update_cart_quantity_ajax' );
+add_action( 'wp_ajax_nopriv_update_cart_quantity', 'skal_update_cart_quantity_ajax' );
+
+// ============================================
 // ADD ZONA COLUMN TO ORDERS LIST
 // ============================================
 

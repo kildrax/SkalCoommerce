@@ -240,6 +240,9 @@
     container-type: inline-size;
     container-name: card-header;
   }
+  .pointer-events-none {
+    pointer-events: none;
+  }
   .visible {
     visibility: visible;
   }
@@ -392,6 +395,9 @@
   }
   .hidden {
     display: none;
+  }
+  .inline {
+    display: inline;
   }
   .inline-block {
     display: inline-block;
@@ -1528,6 +1534,11 @@
       width: 150px;
     }
   }
+  .md\:w-\[200px\] {
+    @media (width >= 48rem) {
+      width: 200px;
+    }
+  }
   .md\:w-\[500px\] {
     @media (width >= 48rem) {
       width: 500px;
@@ -1606,6 +1617,11 @@
   .md\:bg-white {
     @media (width >= 48rem) {
       background-color: var(--color-white);
+    }
+  }
+  .md\:object-contain {
+    @media (width >= 48rem) {
+      object-fit: contain;
     }
   }
   .md\:px-2 {

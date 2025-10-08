@@ -30,7 +30,6 @@ do_action('woocommerce_before_cart');
 					foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
 						$_product   = $cart_item['data'];
 						$product_id = $cart_item['product_id'];
-
 						if ($_product && $_product->exists() && $cart_item['quantity'] > 0) {
 							$product_permalink = $_product->get_permalink($cart_item);
 					?>
@@ -43,9 +42,15 @@ do_action('woocommerce_before_cart');
 									</svg>
 								</button>
 								<div class="flex flex-col md:flex-row items-center space-x-4 md:w-[500px]">
-									<div class="w-full h-64 md:w-[150px] md:h-auto rounded-lg overflow-hidden flex-shrink-0 m-0 md:mr-4">
+									<div class="w-full h-64 md:w-[200px] md:h-auto rounded-lg overflow-hidden flex-shrink-0 m-0 md:mr-4">
 										<?php
 										$thumbnail = $_product->get_image('woocommerce_thumbnail');
+										// Remove inline width and height attributes
+										$thumbnail = preg_replace('/(width|height)="\d*"\s/', '', $thumbnail);
+										// Remove existing class attribute if present
+										$thumbnail = preg_replace('/class="[^"]*"/', '', $thumbnail);
+										// Add custom classes to the image
+										$thumbnail = str_replace('<img ', '<img class="w-full h-full object-cover md:object-contain rounded-lg" ', $thumbnail);
 										echo $thumbnail;
 										?>
 									</div>
@@ -53,7 +58,7 @@ do_action('woocommerce_before_cart');
 										<h3 class="text-2xl text-stone-900 leading-none">
 											<?php echo esc_html($_product->get_name()); ?>
 										</h3>
-										<p class="text-stone-600 text-md md:my-2">
+										<p class="text-stone-600 text-md my-2">
 											<?php echo wp_kses_post($_product->get_short_description()); ?>
 										</p>
 										<span class="text-lg text-teal-700">
