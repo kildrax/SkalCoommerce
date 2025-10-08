@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCartPageUpdates();
     initCartQuantityButtons();
     initRemoveFromCart();
+    initOrderPopup();
     
 });
 
@@ -474,4 +475,130 @@ function getWooCommerceNonce() {
     
     console.error('Could not find WooCommerce nonce!');
     return '';
+}
+
+/**
+ * Initialize order popup functionality
+ */
+function initOrderPopup() {
+    console.log('Initializing order popup...');
+    
+    const openButton = document.getElementById('open-order-popup');
+    const closeButton = document.getElementById('close-order-popup');
+    const popup = document.getElementById('order-popup');
+    const orderForm = document.getElementById('order-details-form');
+    
+    if (!openButton || !popup) {
+        console.log('Order popup elements not found on this page');
+        return;
+    }
+    
+    // Open popup
+    openButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Opening order popup...');
+        popup.classList.remove('hidden');
+        popup.classList.add('flex');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    });
+    
+    // Close popup
+    if (closeButton) {
+        closeButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Closing order popup...');
+            popup.classList.add('hidden');
+            popup.classList.remove('flex');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+    }
+    
+    // Close popup when clicking outside
+    popup.addEventListener('click', function(e) {
+        if (e.target === popup) {
+            console.log('Closing popup (clicked outside)...');
+            popup.classList.add('hidden');
+            popup.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+    });
+    
+    // Handle form submission
+    if (orderForm) {
+        orderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Order form submitted!');
+            
+            const submitButton = document.getElementById('submit-order-btn');
+            const originalText = submitButton.textContent;
+            
+            // Disable button and show loading
+            submitButton.disabled = true;
+            submitButton.textContent = 'Procesando...';
+            
+            // Get form data
+            const formData = new FormData(orderForm);
+            const customerData = {
+                nombre: formData.get('nombre'),
+                apellido: formData.get('apellido'),
+                celular: formData.get('celular'),
+                zona: formData.get('zona'),
+                direccion: formData.get('direccion')
+            };
+            
+            console.log('Customer data:', customerData);
+            
+            // Get AJAX URL
+            const ajaxUrl = getAjaxUrl();
+            
+            // Prepare data for AJAX request
+            const requestData = new URLSearchParams({
+                action: 'process_custom_order',
+                nonce: getWooCommerceNonce(),
+                customer_data: JSON.stringify(customerData)
+            });
+            
+            // Send AJAX request
+            fetch(ajaxUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: requestData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Order response:', data);
+                
+                if (data.success) {
+                    // Show success message
+                    showNotification('¡Orden realizada con éxito!', 'success');
+                    
+                    // Redirect to thank you page
+                    setTimeout(() => {
+                        if (data.data.redirect_url) {
+                            window.location.href = data.data.redirect_url;
+                        } else {
+                            window.location.reload();
+                        }
+                    }, 1500);
+                } else {
+                    // Show error message
+                    showNotification(data.data.message || 'Error al procesar la orden', 'error');
+                    
+                    // Re-enable button
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalText;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Error al procesar la orden', 'error');
+                
+                // Re-enable button
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+            });
+        });
+    }
 }

@@ -115,21 +115,98 @@ do_action('woocommerce_before_cart');
 					<?php do_action('woocommerce_after_cart_table'); ?>
 
 					<!-- Total amount and place order card -->
-					<div class="flex flex-col gap-6 rounded-xl border border-teal-200 bg-teal-50">
-						<div class="p-6">
+					<div class="flex flex-col rounded-xl border border-teal-200 bg-teal-50 p-6">
 							<div class="flex items-center justify-between text-xl">
 								<span class="text-stone-900">Total:</span>
 								<span class="text-teal-700"><?php echo WC()->cart->get_cart_total(); ?></span>
 							</div>
 							<div class="h-px w-full bg-stone-200 my-4"></div>
-							<button class="w-full h-10 rounded-md px-6 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium transition-all">
-								Colocar Orden
+							<button type="button" id="open-order-popup" class="w-full h-10 rounded-md px-6 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium transition-all">
+								Siguiente
 							</button>
 						</div>
 					</div>
 				</div>
 			</section>
 		</form>
+
+		<!-- Order Details Popup Modal -->
+		<div id="order-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center p-4">
+			<div class="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+				<div class="p-6">
+					<div class="flex items-center justify-between mb-6">
+						<h2 class="text-2xl font-semibold text-stone-900">Información de Entrega</h2>
+						<button type="button" id="close-order-popup" class="text-stone-400 hover:text-stone-600 transition-colors">
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+							</svg>
+						</button>
+					</div>
+
+					<form id="order-details-form" class="space-y-4">
+						<!-- Nombre -->
+						<div>
+							<label for="customer-nombre" class="block text-sm font-medium text-stone-700 mb-1">Nombre</label>
+							<input type="text" id="customer-nombre" name="nombre" maxlength="30" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+						</div>
+
+						<!-- Apellido -->
+						<div>
+							<label for="customer-apellido" class="block text-sm font-medium text-stone-700 mb-1">Apellido</label>
+							<input type="text" id="customer-apellido" name="apellido" maxlength="30" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+						</div>
+
+						<!-- Celular -->
+						<div>
+							<label for="customer-celular" class="block text-sm font-medium text-stone-700 mb-1">Celular</label>
+							<input type="tel" id="customer-celular" name="celular" maxlength="10" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+						</div>
+
+						<!-- Zona -->
+						<div>
+							<label for="customer-zona" class="block text-sm font-medium text-stone-700 mb-1">Zona de Bogotá</label>
+							<select id="customer-zona" name="zona" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+								<option value="">Selecciona una zona</option>
+								<option value="Usaquén">Usaquén</option>
+								<option value="Chapinero">Chapinero</option>
+								<option value="Santa Fe">Santa Fe</option>
+								<option value="San Cristóbal">San Cristóbal</option>
+								<option value="Usme">Usme</option>
+								<option value="Tunjuelito">Tunjuelito</option>
+								<option value="Bosa">Bosa</option>
+								<option value="Kennedy">Kennedy</option>
+								<option value="Fontibón">Fontibón</option>
+								<option value="Engativá">Engativá</option>
+								<option value="Suba">Suba</option>
+								<option value="Barrios Unidos">Barrios Unidos</option>
+								<option value="Teusaquillo">Teusaquillo</option>
+								<option value="Los Mártires">Los Mártires</option>
+								<option value="Antonio Nariño">Antonio Nariño</option>
+								<option value="Puente Aranda">Puente Aranda</option>
+								<option value="La Candelaria">La Candelaria</option>
+								<option value="Rafael Uribe Uribe">Rafael Uribe Uribe</option>
+								<option value="Ciudad Bolívar">Ciudad Bolívar</option>
+								<option value="Sumapaz">Sumapaz</option>
+							</select>
+						</div>
+
+						<!-- Dirección -->
+						<div>
+							<label for="customer-direccion" class="block text-sm font-medium text-stone-700 mb-1">Dirección</label>
+							<textarea id="customer-direccion" name="direccion" rows="3" maxlength="100" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"></textarea>
+						</div>
+
+						<!-- Submit Button -->
+						<div class="pt-4">
+							<button type="submit" id="submit-order-btn" class="w-full h-12 rounded-md px-6 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium transition-all">
+								Realizar Orden
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
 	<?php endif; ?>
 </div>
 

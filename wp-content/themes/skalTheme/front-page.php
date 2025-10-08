@@ -46,12 +46,16 @@ get_header(); ?>
               $image_url = $product_image ? $product_image[0] : wc_placeholder_img_src();
           ?>
               <!-- Product Slide -->
-              <a href="<?php echo esc_url($product->get_permalink()); ?>" class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
+              <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
                 <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
-                  <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                  <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                  </a>
                   <div class="px-4 pb-4">
-                    <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
-                    <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
+                    <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                      <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
+                      <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
+                    </a>
                     <?php
                     // Get product rating data
                     $average_rating = $product->get_average_rating();
@@ -100,7 +104,7 @@ get_header(); ?>
                     </form>
                   </div>
                 </div>
-              </a>
+              </div>
           <?php
             endforeach;
           endif;
@@ -177,12 +181,16 @@ get_header(); ?>
               $image_url = $product_image ? $product_image[0] : wc_placeholder_img_src();
           ?>
               <!-- Product Slide -->
-              <a href="<?php echo esc_url($product->get_permalink()); ?>" class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
+              <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
                 <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
-                  <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                  <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                  </a>
                   <div class="px-4 pb-4">
-                    <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
-                    <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
+                    <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                      <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
+                      <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
+                    </a>
                     <?php
                     // Get product rating data
                     $average_rating = $product->get_average_rating();
@@ -231,7 +239,7 @@ get_header(); ?>
                     </form>
                   </div>
                 </div>
-              </a>
+              </div>
           <?php
             endforeach;
           endif;
@@ -287,7 +295,13 @@ get_header(); ?>
 
   <!-- Tortas -->
   <section class="container mx-auto p-4 mt-8 max-w-7xl">
-    <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Tortas</h2>
+    <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Tortas</h2>
+    <!-- Total amount and place order card -->
+    <div class="flex flex-col rounded-xl border border-orange-500 bg-orange-50 p-2 mb-4 md:w-3/4 w-[97%] mx-auto">
+      <div class="flex items-center justify-center text-lg text-stone-900">
+        <p><span class="font-bold">Importante:</span> Las tortas necesitan 3 días de anticipación para su debida elaboración</p>
+      </div>
+    </div>
     <!-- Carousel Container -->
     <div class="relative mx-auto">
       <!-- Carousel Wrapper -->
@@ -308,12 +322,16 @@ get_header(); ?>
               $image_url = $product_image ? $product_image[0] : wc_placeholder_img_src();
           ?>
               <!-- Product Slide -->
-              <a href="<?php echo esc_url($product->get_permalink()); ?>" class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
+              <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
                 <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
-                  <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                  <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                  </a>
                   <div class="px-4 pb-4">
-                    <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
-                    <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
+                    <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                      <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
+                      <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
+                    </a>
                     <?php
                     // Get product rating data
                     $average_rating = $product->get_average_rating();
@@ -362,7 +380,7 @@ get_header(); ?>
                     </form>
                   </div>
                 </div>
-              </a>
+              </div>
           <?php
             endforeach;
           endif;

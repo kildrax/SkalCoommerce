@@ -301,3 +301,312 @@ function skal_ajax_add_to_cart() {
 }
 add_action( 'wp_ajax_woocommerce_ajax_add_to_cart', 'skal_ajax_add_to_cart' );
 add_action( 'wp_ajax_nopriv_woocommerce_ajax_add_to_cart', 'skal_ajax_add_to_cart' );
+
+// ============================================
+// CUSTOM ORDER PROCESSING WITH CUSTOMER DATA
+// ============================================
+function skal_process_custom_order() {
+    // Verify nonce for security
+    if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'woocommerce-cart' ) ) {
+        wp_send_json_error( array( 'message' => 'Security check failed' ) );
+    }
+
+    // Check if customer data is provided
+    if ( ! isset( $_POST['customer_data'] ) ) {
+        wp_send_json_error( array( 'message' => 'Customer data is required' ) );
+    }
+
+    // Decode customer data
+    $customer_data = json_decode( stripslashes( $_POST['customer_data'] ), true );
+    
+    if ( ! $customer_data ) {
+        wp_send_json_error( array( 'message' => 'Invalid customer data' ) );
+    }
+
+    // Validate required fields
+    $required_fields = array( 'nombre', 'apellido', 'celular', 'zona', 'direccion' );
+    foreach ( $required_fields as $field ) {
+        if ( empty( $customer_data[ $field ] ) ) {
+            wp_send_json_error( array( 'message' => 'Todos los campos son requeridos' ) );
+        }
+    }
+
+    // Check if cart is empty
+    if ( WC()->cart->is_empty() ) {
+        wp_send_json_error( array( 'message' => 'El carrito está vacío' ) );
+    }
+
+    try {
+        // Search for existing customer by phone number
+        $customer_id = 0;
+        $celular = sanitize_text_field( $customer_data['celular'] );
+        
+        // Search in user meta for existing customer with this phone
+        $existing_users = get_users( array(
+            'meta_key' => 'billing_phone',
+            'meta_value' => $celular,
+            'number' => 1
+        ) );
+        
+        if ( ! empty( $existing_users ) ) {
+            // Customer exists, use their ID
+            $customer_id = $existing_users[0]->ID;
+            $customer = new WC_Customer( $customer_id );
+            
+            // Update customer information with latest data
+            $customer->set_first_name( sanitize_text_field( $customer_data['nombre'] ) );
+            $customer->set_last_name( sanitize_text_field( $customer_data['apellido'] ) );
+            $customer->set_billing_phone( $celular );
+            $customer->set_billing_address_1( sanitize_textarea_field( $customer_data['direccion'] ) );
+            $customer->set_billing_city( 'Bogotá' );
+            $customer->set_billing_state( sanitize_text_field( $customer_data['zona'] ) );
+            $customer->set_billing_country( 'CO' );
+            $customer->save();
+        } else {
+            // Create new customer
+            $customer = new WC_Customer();
+            $customer->set_first_name( sanitize_text_field( $customer_data['nombre'] ) );
+            $customer->set_last_name( sanitize_text_field( $customer_data['apellido'] ) );
+            $customer->set_billing_phone( $celular );
+            $customer->set_billing_address_1( sanitize_textarea_field( $customer_data['direccion'] ) );
+            $customer->set_billing_city( 'Bogotá' );
+            $customer->set_billing_state( sanitize_text_field( $customer_data['zona'] ) );
+            $customer->set_billing_country( 'CO' );
+            
+            // Generate email based on phone number (required by WooCommerce)
+            $customer->set_email( $celular . '@guest.local' );
+            
+            // Generate username based on phone
+            $customer->set_username( 'guest_' . $celular );
+            
+            // Save customer
+            $customer_id = $customer->save();
+        }
+        
+        // Create the order and associate with customer
+        $order = wc_create_order( array( 'customer_id' => $customer_id ) );
+
+        // Add cart items to order
+        foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+            $product_id = $cart_item['product_id'];
+            $quantity = $cart_item['quantity'];
+            $product = wc_get_product( $product_id );
+            
+            if ( $product ) {
+                $order->add_product( $product, $quantity );
+            }
+        }
+
+        // Set billing information
+        $order->set_billing_first_name( sanitize_text_field( $customer_data['nombre'] ) );
+        $order->set_billing_last_name( sanitize_text_field( $customer_data['apellido'] ) );
+        $order->set_billing_phone( $celular );
+        $order->set_billing_address_1( sanitize_textarea_field( $customer_data['direccion'] ) );
+        $order->set_billing_city( 'Bogotá' );
+        $order->set_billing_state( sanitize_text_field( $customer_data['zona'] ) );
+        $order->set_billing_country( 'CO' );
+        $order->set_billing_email( $celular . '@guest.local' );
+
+        // Set shipping information (same as billing)
+        $order->set_shipping_first_name( sanitize_text_field( $customer_data['nombre'] ) );
+        $order->set_shipping_last_name( sanitize_text_field( $customer_data['apellido'] ) );
+        $order->set_shipping_address_1( sanitize_textarea_field( $customer_data['direccion'] ) );
+        $order->set_shipping_city( 'Bogotá' );
+        $order->set_shipping_state( sanitize_text_field( $customer_data['zona'] ) );
+        $order->set_shipping_country( 'CO' );
+
+        // Add custom meta data for zona
+        $order->update_meta_data( '_zona_bogota', sanitize_text_field( $customer_data['zona'] ) );
+        $order->update_meta_data( '_celular_cliente', sanitize_text_field( $customer_data['celular'] ) );
+        
+        // Set Origin to "Web"
+        $order->update_meta_data( 'Origin', 'Web' );
+
+        // Calculate totals
+        $order->calculate_totals();
+
+        // Set order status to pending payment
+        $order->set_status( 'pending', 'Orden creada desde la web - Pendiente de pago' );
+
+        // Save the order
+        $order->save();
+
+        // Add order note with customer details
+        $order_note = sprintf(
+            'Información de entrega:<br>Nombre: %s %s<br>Celular: %s<br>Zona: %s<br>Dirección: %s',
+            $customer_data['nombre'],
+            $customer_data['apellido'],
+            $customer_data['celular'],
+            $customer_data['zona'],
+            $customer_data['direccion']
+        );
+        $order->add_order_note( $order_note );
+
+        // Empty the cart
+        WC()->cart->empty_cart();
+
+        // Send success response
+        wp_send_json_success( array(
+            'message' => 'Orden creada exitosamente',
+            'order_id' => $order->get_id(),
+            'redirect_url' => home_url( '/gracias/?order_id=' . $order->get_id() )
+        ) );
+
+    } catch ( Exception $e ) {
+        wp_send_json_error( array( 'message' => 'Error al crear la orden: ' . $e->getMessage() ) );
+    }
+}
+add_action( 'wp_ajax_process_custom_order', 'skal_process_custom_order' );
+add_action( 'wp_ajax_nopriv_process_custom_order', 'skal_process_custom_order' );
+
+// ============================================
+// ADD ZONA COLUMN TO ORDERS LIST
+// ============================================
+
+// Add custom column to orders list (legacy and HPOS)
+add_filter( 'manage_edit-shop_order_columns', 'skal_add_zona_column_to_orders', 20 );
+add_filter( 'manage_woocommerce_page_wc-orders_columns', 'skal_add_zona_column_to_orders', 20 );
+function skal_add_zona_column_to_orders( $columns ) {
+    $new_columns = array();
+    
+    foreach ( $columns as $column_name => $column_info ) {
+        $new_columns[ $column_name ] = $column_info;
+        
+        // Add Zona column after Order column
+        if ( 'order_number' === $column_name ) {
+            $new_columns['zona_bogota'] = 'Zona';
+        }
+    }
+    
+    return $new_columns;
+}
+
+// Populate the Zona column (legacy posts)
+add_action( 'manage_shop_order_posts_custom_column', 'skal_populate_zona_column', 10, 2 );
+function skal_populate_zona_column( $column, $post_id ) {
+    if ( 'zona_bogota' === $column ) {
+        $order = wc_get_order( $post_id );
+        if ( $order ) {
+            $zona = $order->get_meta( '_zona_bogota' );
+            if ( $zona ) {
+                echo '<span class="zona-badge">' . esc_html( $zona ) . '</span>';
+            } else {
+                echo '<span style="color: #999;">—</span>';
+            }
+        }
+    }
+}
+
+// Populate the Zona column (HPOS)
+add_action( 'manage_woocommerce_page_wc-orders_custom_column', 'skal_populate_zona_column_hpos', 10, 2 );
+function skal_populate_zona_column_hpos( $column, $order ) {
+    if ( 'zona_bogota' === $column ) {
+        if ( is_numeric( $order ) ) {
+            $order = wc_get_order( $order );
+        }
+        
+        if ( $order ) {
+            $zona = $order->get_meta( '_zona_bogota' );
+            if ( $zona ) {
+                echo '<span class="zona-badge">' . esc_html( $zona ) . '</span>';
+            } else {
+                echo '<span style="color: #999;">—</span>';
+            }
+        }
+    }
+}
+
+// Make the column sortable
+add_filter( 'manage_edit-shop_order_sortable_columns', 'skal_zona_column_sortable' );
+function skal_zona_column_sortable( $columns ) {
+    $columns['zona_bogota'] = 'zona_bogota';
+    return $columns;
+}
+
+// Add filter dropdown for Zona (compatible with HPOS)
+add_action( 'restrict_manage_posts', 'skal_add_zona_filter_to_orders' );
+add_action( 'woocommerce_order_list_table_restrict_manage_orders', 'skal_add_zona_filter_to_orders' );
+function skal_add_zona_filter_to_orders() {
+    global $typenow;
+    
+    // Check if we're on the orders page (works for both legacy and HPOS)
+    $current_screen = get_current_screen();
+    if ( ( 'shop_order' === $typenow ) || ( $current_screen && 'woocommerce_page_wc-orders' === $current_screen->id ) ) {
+        $zonas = array(
+            'Usaquén',
+            'Chapinero',
+            'Santa Fe',
+            'San Cristóbal',
+            'Usme',
+            'Tunjuelito',
+            'Bosa',
+            'Kennedy',
+            'Fontibón',
+            'Engativá',
+            'Suba',
+            'Barrios Unidos',
+            'Teusaquillo',
+            'Los Mártires',
+            'Antonio Nariño',
+            'Puente Aranda',
+            'La Candelaria',
+            'Rafael Uribe Uribe',
+            'Ciudad Bolívar',
+            'Sumapaz'
+        );
+        
+        $current_zona = isset( $_GET['zona_filter'] ) ? sanitize_text_field( $_GET['zona_filter'] ) : '';
+        
+        echo '<select name="zona_filter" id="zona_filter" style="float: none;">';
+        echo '<option value="">Todas las zonas</option>';
+        
+        foreach ( $zonas as $zona ) {
+            printf(
+                '<option value="%s"%s>%s</option>',
+                esc_attr( $zona ),
+                selected( $current_zona, $zona, false ),
+                esc_html( $zona )
+            );
+        }
+        
+        echo '</select>';
+    }
+}
+
+// Filter orders by Zona (legacy posts)
+add_filter( 'parse_query', 'skal_filter_orders_by_zona' );
+function skal_filter_orders_by_zona( $query ) {
+    global $pagenow, $typenow;
+    
+    if ( 'edit.php' === $pagenow && 'shop_order' === $typenow && isset( $_GET['zona_filter'] ) && ! empty( $_GET['zona_filter'] ) ) {
+        $zona = sanitize_text_field( $_GET['zona_filter'] );
+        
+        $meta_query = array(
+            array(
+                'key' => '_zona_bogota',
+                'value' => $zona,
+                'compare' => '='
+            )
+        );
+        
+        $query->set( 'meta_query', $meta_query );
+    }
+}
+
+// Filter orders by Zona (HPOS compatible)
+add_filter( 'woocommerce_order_list_table_prepare_items_query_args', 'skal_filter_orders_by_zona_hpos' );
+function skal_filter_orders_by_zona_hpos( $query_args ) {
+    if ( isset( $_GET['zona_filter'] ) && ! empty( $_GET['zona_filter'] ) ) {
+        $zona = sanitize_text_field( $_GET['zona_filter'] );
+        
+        $query_args['meta_query'] = array(
+            array(
+                'key' => '_zona_bogota',
+                'value' => $zona,
+                'compare' => '='
+            )
+        );
+    }
+    
+    return $query_args;
+}
