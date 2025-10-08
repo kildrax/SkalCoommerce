@@ -20,11 +20,12 @@
             <div class="container mx-auto px-4 py-2 grid grid-cols-3 items-center">
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex justify-start">
-                    <ul class="flex justify-between items-center w-96">
+                    <ul class="flex justify-between items-center w-full">
                         <li><a class="text-lg font-roboto" href="<?php echo home_url('/'); ?>">Inicio</a></li>
-                        <li><a class="text-lg font-roboto" href="">Categorías</a></li>
-                        <li><a class="text-lg font-roboto" href="">Catering</a></li>
-                        <li><a class="text-lg font-roboto" href="">Contacto</a></li>
+                        <li><a class="text-lg font-roboto" href="#brownies">Brownies</a></li>
+                        <li><a class="text-lg font-roboto" href="#siropes">Siropes</a></li>
+                        <li><a class="text-lg font-roboto" href="#tortas">Tortas</a></li>
+                        <li><a class="text-lg font-roboto" href="#eventos">Eventos</a></li>
                     </ul>
                 </nav>
 

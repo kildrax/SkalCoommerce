@@ -24,7 +24,7 @@ get_header(); ?>
   <?php endwhile; ?>
 
   <!-- Brownies -->
-  <section class="container mx-auto p-4 mt-8 max-w-7xl">
+  <section id="brownies" class="container mx-auto p-4 mt-8 max-w-7xl">
     <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Brownies</h2>
     <!-- Carousel Container -->
     <div class="relative mx-auto">
@@ -159,7 +159,7 @@ get_header(); ?>
   </section>
 
   <!-- Sirope -->
-  <section class="container mx-auto p-4 mt-8 max-w-7xl">
+  <section id="siropes" class="container mx-auto p-4 mt-8 max-w-7xl">
     <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Siropes</h2>
     <!-- Carousel Container -->
     <div class="relative mx-auto">
@@ -294,7 +294,7 @@ get_header(); ?>
   </section>
 
   <!-- Tortas -->
-  <section class="container mx-auto p-4 mt-8 max-w-7xl">
+  <section id="tortas" class="container mx-auto p-4 mt-8 max-w-7xl">
     <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Tortas</h2>
     <!-- Total amount and place order card -->
     <div class="flex flex-col rounded-xl border border-orange-500 bg-orange-50 p-2 mb-4 md:w-3/4 w-[97%] mx-auto">
@@ -436,7 +436,7 @@ get_header(); ?>
 
   <!-- Eventos -->
   <?php while (have_posts()) : the_post(); ?>
-    <section class="p-8 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 border-0 w-[90%] mx-auto mt-12 max-w-7xl">
+    <section id="eventos" class="p-8 rounded-xl bg-gradient-to-r from-stone-800 to-stone-900 border-0 w-[90%] mx-auto mt-12 max-w-7xl">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div class="text-white">
           <h3 class="text-3xl mb-4 font-roboto font-medium"><?php the_field('titulo_principal_catering'); ?></h3>
