@@ -71,10 +71,11 @@
             <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-stone-200">
                 <nav class="container mx-auto px-4 py-4">
                     <ul class="flex flex-col space-y-3">
-                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="<?php echo home_url('/'); ?>">Inicio</a></li>
-                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="">Categorías</a></li>
-                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="">Catering</a></li>
-                        <li><a class="block text-lg text-gray-700 hover:text-gray-900 py-2" href="">Contacto</a></li>
+                        <li><a class="text-lg font-roboto" href="<?php echo home_url('/'); ?>">Inicio</a></li>
+                        <li><a class="text-lg font-roboto" href="#brownies">Brownies</a></li>
+                        <li><a class="text-lg font-roboto" href="#siropes">Siropes</a></li>
+                        <li><a class="text-lg font-roboto" href="#tortas">Tortas</a></li>
+                        <li><a class="text-lg font-roboto" href="#eventos">Eventos</a></li>
                     </ul>
                 </nav>
             </div>
