@@ -206,10 +206,10 @@ do_action('woocommerce_before_cart');
 							<div class="flex items-start gap-3">
 								<input type="checkbox" id="customer-tratamiento-datos" name="tratamiento_datos" value="aceptado" required class="mt-1 h-4 w-4 rounded border-stone-300 text-teal-600 focus:ring-teal-500">
 								<label for="customer-tratamiento-datos" class="text-sm text-stone-700">
-									Acepto el tratamiento de mis datos personales según el documento de 
+									Autorizo el tratamiento de datos personales conforme a las finalidades expuestas en el
 									<a href="<?php echo home_url('/autorizacion-para-el-tratamiento-de-datos-personales/'); ?>" target="_blank" class="text-teal-600 hover:text-teal-700 underline font-medium">
-										Tratamiento de datos personales
-									</a>.
+										tratamiento de datos personales
+									</a>
 								</label>
 							</div>
 						</div>
