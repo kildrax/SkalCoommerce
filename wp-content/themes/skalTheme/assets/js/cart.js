@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCartCounter();
     initQuantitySelectors();
     initAjaxAddToCart();
+    initAjaxAddToCartSpecial();
     initCartPageUpdates();
     initCartQuantityButtons();
     initRemoveFromCart();
@@ -670,4 +671,89 @@ function initOrderPopup() {
             });
         });
     }
+}
+
+/**
+ * Initialize AJAX add to cart for special products section
+ */
+function initAjaxAddToCartSpecial() {
+    const specialForm = document.querySelector('.ajax-add-to-cart-special');
+    
+    if (!specialForm) {
+        return; // Form not present on this page
+    }
+    
+    specialForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        console.log('Special product add to cart triggered');
+        
+        const productId = this.dataset.productId;
+        const quantity = this.querySelector('input[name="quantity"]').value;
+        const button = this.querySelector('.special-add-to-cart-btn');
+        const notification = document.getElementById('cart-notification');
+        
+        // Save original button text
+        const originalText = button.innerHTML;
+        
+        // Disable button and show loading
+        button.disabled = true;
+        button.innerHTML = '⏳ Agregando...';
+        
+        // Get AJAX URL
+        const ajaxUrl = getAjaxUrl();
+        
+        // Prepare form data
+        const formData = new URLSearchParams({
+            action: 'woocommerce_ajax_add_to_cart',
+            product_id: productId,
+            quantity: quantity
+        });
+        
+        // Send AJAX request
+        fetch(ajaxUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Add to cart response:', data);
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Show success notification
+            if (notification) {
+                notification.classList.remove('hidden');
+                notification.classList.add('animate-bounce');
+                
+                // Hide notification after 3 seconds
+                setTimeout(() => {
+                    notification.classList.add('hidden');
+                    notification.classList.remove('animate-bounce');
+                }, 3000);
+            }
+            
+            // Reset button
+            button.disabled = false;
+            button.innerHTML = originalText;
+            
+            // Trigger WooCommerce fragments refresh
+            jQuery(document.body).trigger('wc_fragment_refresh');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al agregar el producto al carrito. Por favor, intenta nuevamente.');
+            
+            // Reset button
+            button.disabled = false;
+            button.innerHTML = originalText;
+        });
+    });
 }
