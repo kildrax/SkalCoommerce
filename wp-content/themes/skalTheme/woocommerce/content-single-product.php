@@ -119,7 +119,7 @@ if (post_password_required()) {
             </div>
         </div>
         <!-- Informacion del producto -->
-        <div class="space-y-6">
+        <div class="">
             <div>
                 <?php
                 // Get product categories
@@ -168,7 +168,7 @@ if (post_password_required()) {
                 <p class="text-stone-600 leading-relaxed mb-6"><?php echo wp_kses_post($product->get_short_description()); ?></p>
             </div>
             <!-- Ingredientes y alergenos -->
-            <div class="space-y-4">
+            <div class="">
                 <?php
                 // Get Ingredientes attribute
                 $ingredientes = $product->get_attribute('ingredientes');

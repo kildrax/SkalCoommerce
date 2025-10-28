@@ -554,6 +554,22 @@ function initOrderPopup() {
         return;
     }
     
+    // Validate celular input to only allow numbers
+    const celularInput = document.getElementById('customer-celular');
+    if (celularInput) {
+        celularInput.addEventListener('input', function(e) {
+            // Remove any non-numeric characters
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        
+        celularInput.addEventListener('keypress', function(e) {
+            // Prevent non-numeric keys
+            if (e.key && !/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') {
+                e.preventDefault();
+            }
+        });
+    }
+    
     // Open popup
     openButton.addEventListener('click', function(e) {
         e.preventDefault();
@@ -607,7 +623,8 @@ function initOrderPopup() {
                 apellido: formData.get('apellido'),
                 celular: formData.get('celular'),
                 zona: formData.get('zona'),
-                direccion: formData.get('direccion')
+                direccion: formData.get('direccion'),
+                tratamiento_datos: formData.get('tratamiento_datos')
             };
             
             console.log('Customer data:', customerData);

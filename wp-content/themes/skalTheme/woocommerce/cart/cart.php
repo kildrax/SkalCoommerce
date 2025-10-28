@@ -148,7 +148,7 @@ do_action('woocommerce_before_cart');
 						</button>
 					</div>
 
-					<form id="order-details-form" class="space-y-4">
+					<form id="order-details-form" class="space-y-2">
 						<!-- Nombre -->
 						<div>
 							<label for="customer-nombre" class="block text-sm font-medium text-stone-700 mb-1">Nombre</label>
@@ -164,7 +164,7 @@ do_action('woocommerce_before_cart');
 						<!-- Celular -->
 						<div>
 							<label for="customer-celular" class="block text-sm font-medium text-stone-700 mb-1">Celular</label>
-							<input type="tel" id="customer-celular" name="celular" maxlength="10" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+							<input type="tel" id="customer-celular" name="celular" pattern="[0-9]{10}" maxlength="10" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent" title="Ingresa un número de celular válido de 10 dígitos">
 						</div>
 
 						<!-- Zona -->
@@ -201,8 +201,21 @@ do_action('woocommerce_before_cart');
 							<textarea id="customer-direccion" name="direccion" rows="3" maxlength="100" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"></textarea>
 						</div>
 
+						<!-- Tratamiento de datos personales -->
+						<div class="">
+							<div class="flex items-start gap-3">
+								<input type="checkbox" id="customer-tratamiento-datos" name="tratamiento_datos" value="aceptado" required class="mt-1 h-4 w-4 rounded border-stone-300 text-teal-600 focus:ring-teal-500">
+								<label for="customer-tratamiento-datos" class="text-sm text-stone-700">
+									Acepto el tratamiento de mis datos personales según el documento de 
+									<a href="<?php echo home_url('/autorizacion-para-el-tratamiento-de-datos-personales/'); ?>" target="_blank" class="text-teal-600 hover:text-teal-700 underline font-medium">
+										Tratamiento de datos personales
+									</a>.
+								</label>
+							</div>
+						</div>
+
 						<!-- Submit Button -->
-						<div class="pt-4">
+						<div class="pt-2">
 							<button type="submit" id="submit-order-btn" class="w-full h-12 rounded-md px-6 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium transition-all">
 								Realizar Orden
 							</button>

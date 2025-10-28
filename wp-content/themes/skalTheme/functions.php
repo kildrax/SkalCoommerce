@@ -419,6 +419,12 @@ function skal_process_custom_order() {
         $order->update_meta_data( '_zona_bogota', sanitize_text_field( $customer_data['zona'] ) );
         $order->update_meta_data( '_celular_cliente', sanitize_text_field( $customer_data['celular'] ) );
         
+        // Add tratamiento de datos if provided
+        if ( ! empty( $customer_data['tratamiento_datos'] ) ) {
+            $order->update_meta_data( '_tratamiento_datos_aceptado', 'Si' );
+            $order->update_meta_data( '_tratamiento_datos_fecha', current_time( 'mysql' ) );
+        }
+        
         // Set Origin to "Web"
         $order->update_meta_data( 'Origin', 'Web' );
 
@@ -432,13 +438,15 @@ function skal_process_custom_order() {
         $order->save();
 
         // Add order note with customer details
+        $tratamiento_texto = ! empty( $customer_data['tratamiento_datos'] ) ? 'Sí - ' . current_time( 'Y-m-d H:i:s' ) : 'No aceptado';
         $order_note = sprintf(
-            'Información de entrega:<br>Nombre: %s %s<br>Celular: %s<br>Zona: %s<br>Dirección: %s',
+            'Información de entrega:<br>Nombre: %s %s<br>Celular: %s<br>Zona: %s<br>Dirección: %s<br>Tratamiento de datos: %s',
             $customer_data['nombre'],
             $customer_data['apellido'],
             $customer_data['celular'],
             $customer_data['zona'],
-            $customer_data['direccion']
+            $customer_data['direccion'],
+            $tratamiento_texto
         );
         $order->add_order_note( $order_note );
 
