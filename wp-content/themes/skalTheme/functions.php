@@ -436,6 +436,14 @@ function skal_process_custom_order() {
 
         // Save the order
         $order->save();
+        
+        // Register order with WooCommerce Analytics
+        if ( function_exists( 'wc_admin_record_order' ) ) {
+            wc_admin_record_order( $order->get_id() );
+        }
+        
+        // Trigger order created action for Analytics
+        do_action( 'woocommerce_new_order', $order->get_id() );
 
         // Add order note with customer details
         $tratamiento_texto = ! empty( $customer_data['tratamiento_datos'] ) ? 'Sí - ' . current_time( 'Y-m-d H:i:s' ) : 'No aceptado';
@@ -466,6 +474,51 @@ function skal_process_custom_order() {
 }
 add_action( 'wp_ajax_process_custom_order', 'skal_process_custom_order' );
 add_action( 'wp_ajax_nopriv_process_custom_order', 'skal_process_custom_order' );
+
+// ============================================
+// WOOCOMMERCE ANALYTICS SETUP (OPCIONAL)
+// ============================================
+
+/**
+ * Sincroniza órdenes existentes con WooCommerce Analytics
+ * Solo necesario ejecutar UNA VEZ si tienes órdenes antiguas
+ */
+function skal_setup_woocommerce_analytics() {
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+    
+    if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
+        return;
+    }
+    
+    // Crear tablas de Analytics si no existen
+    $install_class = '\Automattic\WooCommerce\Admin\Install';
+    if ( class_exists( $install_class ) ) {
+        call_user_func( array( $install_class, 'create_tables' ) );
+    }
+    
+    // Sincronizar órdenes existentes
+    $orders = wc_get_orders( array(
+        'limit' => -1,
+        'status' => array( 'pending', 'processing', 'completed', 'on-hold' )
+    ) );
+    
+    foreach ( $orders as $order ) {
+        if ( function_exists( 'wc_admin_record_order' ) ) {
+            wc_admin_record_order( $order->get_id() );
+        }
+    }
+    
+    // Mostrar mensaje de éxito
+    $order_count = count( $orders );
+    add_action( 'admin_notices', function() use ( $order_count ) {
+        echo '<div class="notice notice-success is-dismissible"><p>Analytics sincronizado: ' . $order_count . ' órdenes procesadas.</p></div>';
+    });
+}
+
+// Descomenta la siguiente línea, visita el admin UNA VEZ, luego vuelve a comentarla
+//add_action( 'admin_init', 'skal_setup_woocommerce_analytics' );
 
 // ============================================
 // AJAX UPDATE CART QUANTITY
