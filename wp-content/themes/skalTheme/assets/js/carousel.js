@@ -44,8 +44,19 @@ function initCarousel(section, carouselIndex) {
             track.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
         
-        // Update indicators
-        indicators.forEach((indicator, index) => {
+        // Update indicators - filter visible indicators based on viewport
+        const visibleIndicators = Array.from(indicators).filter(indicator => {
+            const parent = indicator.parentElement;
+            if (isDesktop) {
+                // Desktop: select indicators in hidden md:flex container
+                return parent.classList.contains('md:flex');
+            } else {
+                // Mobile: select indicators in md:hidden container
+                return parent.classList.contains('md:hidden');
+            }
+        });
+        
+        visibleIndicators.forEach((indicator, index) => {
             indicator.classList.toggle('active', index === currentSlide);
             if (index === currentSlide) {
                 indicator.classList.add('bg-stone-600');
@@ -105,8 +116,19 @@ function initCarousel(section, carouselIndex) {
     if (nextBtn) nextBtn.addEventListener('click', nextSlide);
     if (prevBtn) prevBtn.addEventListener('click', prevSlide);
     
-    // Indicator navigation
-    indicators.forEach((indicator, index) => {
+    // Indicator navigation - separate handlers for mobile and desktop
+    const desktopIndicators = Array.from(indicators).filter(ind => 
+        ind.parentElement.classList.contains('md:flex')
+    );
+    const mobileIndicators = Array.from(indicators).filter(ind => 
+        ind.parentElement.classList.contains('md:hidden')
+    );
+    
+    desktopIndicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => goToSlide(index));
+    });
+    
+    mobileIndicators.forEach((indicator, index) => {
         indicator.addEventListener('click', () => goToSlide(index));
     });
     

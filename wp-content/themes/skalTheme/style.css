@@ -9,8 +9,8 @@ Text Domain: skal-theme
 @import "tailwindcss";
 
 @theme {
-  --font-roboto: 'Roboto', sans-serif;
-} 
+  --font-roboto: "Roboto", sans-serif;
+}
 
 /* Quitar flechas en Chrome, Safari, Edge, Opera */
 input[type="number"]::-webkit-inner-spin-button,
@@ -179,7 +179,8 @@ input[type="number"] {
    ============================== */
 
 @keyframes float-up-down-1 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -188,7 +189,8 @@ input[type="number"] {
 }
 
 @keyframes float-up-down-2 {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -293,4 +295,11 @@ input[type="number"] {
 
 .prose a:hover {
   color: #c2410c;
+}
+
+.specialPrice del,
+.specialPrice del .woocommerce-Price-amount,
+.specialPrice del .woocommerce-Price-amount bdi,
+.specialPrice del .amount {
+  font-size: 15px !important;
 }

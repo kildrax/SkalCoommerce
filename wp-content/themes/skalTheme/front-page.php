@@ -120,13 +120,13 @@ get_header(); ?>
                 </div>
                 <div class="border-t-2 border-white/20 pt-6">
                   <div class="flex items-center justify-between mb-6">
-                    <span class="text-2xl text-white opacity-90">Precio del combo:</span>
+                    <span class="text-xl text-white opacity-90">Precio del combo:</span>
                     <div class="text-right">
                       <?php if ($sale_price): ?>
-                        <div class="text-2xl text-white/60 line-through"><?php echo wc_price($regular_price); ?></div>
-                        <span class="text-5xl text-white drop-shadow-lg"><?php echo wc_price($sale_price); ?></span>
+                        <div class="text-xl text-white/60 line-through"><?php echo wc_price($regular_price); ?></div>
+                        <span class="text-2xl text-white drop-shadow-lg"><?php echo wc_price($sale_price); ?></span>
                       <?php else: ?>
-                        <span class="text-5xl text-white drop-shadow-lg"><?php echo wc_price($price); ?></span>
+                        <span class="text-2xl text-white drop-shadow-lg"><?php echo wc_price($price); ?></span>
                       <?php endif; ?>
                     </div>
                   </div>
@@ -163,7 +163,7 @@ get_header(); ?>
           </div>
         </div>
         <div class="text-center mt-5">
-          <div class="inline-flex items-center space-x-2 text-white opacity-90 text-lg bg-white/10 px-6 py-3 rounded-full border border-white/20"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles h-5 w-5" aria-hidden="true">
+          <div class="inline-flex items-center space-x-2 text-white opacity-90 text-md bg-white/10 px-6 py-3 rounded-full border border-white/20"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles h-5 w-5" aria-hidden="true">
               <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path>
               <path d="M20 2v4"></path>
               <path d="M22 4h-4"></path>
@@ -222,7 +222,7 @@ get_header(); ?>
                     $review_count = $product->get_review_count();
                     ?>
 
-                    <div class="flex items-center space-x-1 my-2.5">
+                    <div class="hidden items-center space-x-1 my-2.5">
                       <!-- Star Rating Display -->
                       <div class="flex items-center space-x-1">
                         <?php for ($i = 1; $i <= 5; $i++) : ?>
@@ -242,7 +242,8 @@ get_header(); ?>
                         <span class="text-sm text-gray-400 ml-2">Sin reseñas</span>
                       <?php endif; ?>
                     </div>
-                    <p class="text-xl text-teal-700 font-bold"><?php echo $product->get_price_html(); ?></p>
+
+                    <div class="flex flex-col text-xl text-teal-700 my-2 specialPrice"><?php echo $product->get_price_html(); ?></div>
 
                     <form class="cart ajax-add-to-cart flex items-center justify-between" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                       <div class="relative flex items-center max-w-[8rem] h-8 my-2.5">
@@ -318,7 +319,7 @@ get_header(); ?>
   </section>
 
   <!-- Sirope -->
-  <section id="siropes" class="container mx-auto p-4 mt-8 max-w-7xl">
+  <section id="siropes" class="container mx-auto p-4 mt-4 max-w-7xl">
     <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Siropes</h2>
     <!-- Carousel Container -->
     <div class="relative mx-auto">
@@ -357,7 +358,7 @@ get_header(); ?>
                     $review_count = $product->get_review_count();
                     ?>
 
-                    <div class="flex items-center space-x-1 my-2.5">
+                    <div class="hidden items-center space-x-1 my-2.5">
                       <!-- Star Rating Display -->
                       <div class="flex items-center space-x-1">
                         <?php for ($i = 1; $i <= 5; $i++) : ?>
@@ -453,11 +454,11 @@ get_header(); ?>
   </section>
 
   <!-- Tortas -->
-  <section id="tortas" class="container mx-auto p-4 mt-8 max-w-7xl">
+  <section id="tortas" class="container mx-auto p-4 mt-4 max-w-7xl">
     <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Tortas</h2>
     <!-- Total amount and place order card -->
     <div class="flex flex-col rounded-xl border border-orange-500 bg-orange-50 p-2 mb-4 md:w-3/4 w-[97%] mx-auto">
-      <div class="flex items-center justify-center text-lg text-stone-900">
+      <div class="flex items-center justify-center text-md text-stone-900">
         <p><span class="font-bold">Importante:</span> Las tortas necesitan 3 días de anticipación para su debida elaboración</p>
       </div>
     </div>
@@ -498,7 +499,7 @@ get_header(); ?>
                     $review_count = $product->get_review_count();
                     ?>
 
-                    <div class="flex items-center space-x-1 my-2.5">
+                    <div class="hidden items-center space-x-1 my-2.5">
                       <!-- Star Rating Display -->
                       <div class="flex items-center space-x-1">
                         <?php for ($i = 1; $i <= 5; $i++) : ?>

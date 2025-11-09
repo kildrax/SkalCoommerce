@@ -442,8 +442,8 @@ function skal_process_custom_order() {
             wc_admin_record_order( $order->get_id() );
         }
         
-        // Trigger order created action for Analytics
-        do_action( 'woocommerce_new_order', $order->get_id() );
+        // Trigger order created action for Analytics (WC expects 2 arguments)
+        do_action( 'woocommerce_new_order', $order->get_id(), $order );
 
         // Add order note with customer details
         $tratamiento_texto = ! empty( $customer_data['tratamiento_datos'] ) ? 'Sí - ' . current_time( 'Y-m-d H:i:s' ) : 'No aceptado';

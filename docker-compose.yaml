@@ -15,6 +15,7 @@ services:
       - wordpress:/var/www/html
       - ./wp-content:/var/www/html/wp-content  # solo esta carpeta en local
       - ./php-custom.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./logs:/var/log
     depends_on:
       - db
       - redis
