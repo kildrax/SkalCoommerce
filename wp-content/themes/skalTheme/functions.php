@@ -308,54 +308,14 @@ function skal_process_custom_order()
     }
 
     try {
-        // Search for existing customer by phone number
+        // NO crear usuarios automáticamente
+        // Las órdenes se crearán como "guest" sin usuario asociado
         $customer_id = 0;
         $celular = sanitize_text_field($customer_data['celular']);
 
-        // Search in user meta for existing customer with this phone
-        $existing_users = get_users(array(
-            'meta_key' => 'billing_phone',
-            'meta_value' => $celular,
-            'number' => 1
-        ));
-
-        if (! empty($existing_users)) {
-            // Customer exists, use their ID
-            $customer_id = $existing_users[0]->ID;
-            $customer = new WC_Customer($customer_id);
-
-            // Update customer information with latest data
-            $customer->set_first_name(sanitize_text_field($customer_data['nombre']));
-            $customer->set_last_name(sanitize_text_field($customer_data['apellido']));
-            $customer->set_billing_phone($celular);
-            $customer->set_billing_address_1(sanitize_textarea_field($customer_data['direccion']));
-            $customer->set_billing_city('Bogotá');
-            $customer->set_billing_state(sanitize_text_field($customer_data['zona']));
-            $customer->set_billing_country('CO');
-            $customer->save();
-        } else {
-            // Create new customer
-            $customer = new WC_Customer();
-            $customer->set_first_name(sanitize_text_field($customer_data['nombre']));
-            $customer->set_last_name(sanitize_text_field($customer_data['apellido']));
-            $customer->set_billing_phone($celular);
-            $customer->set_billing_address_1(sanitize_textarea_field($customer_data['direccion']));
-            $customer->set_billing_city('Bogotá');
-            $customer->set_billing_state(sanitize_text_field($customer_data['zona']));
-            $customer->set_billing_country('CO');
-
-            // Generate email based on phone number (required by WooCommerce)
-            $customer->set_email($celular . '@guest.local');
-
-            // Generate username based on phone
-            $customer->set_username('guest_' . $celular);
-
-            // Save customer
-            $customer_id = $customer->save();
-        }
-
-        // Create the order and associate with customer
-        $order = wc_create_order(array('customer_id' => $customer_id));
+        // Create the order WITHOUT creating a user account
+        // customer_id = 0 means guest checkout
+        $order = wc_create_order(array('customer_id' => 0));
 
         // Add cart items to order
         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
