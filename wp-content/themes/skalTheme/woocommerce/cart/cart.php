@@ -35,7 +35,7 @@ do_action('woocommerce_before_cart');
 					?>
 
 							<!-- Product Card -->
-							<div class="flex flex-col items-end md:flex-row md:items-center md:justify-between rounded-xl border border-stone-200 bg-stone-50/30 p-6 mb-6">
+							<div class="flex flex-col items-end md:flex-row md:items-center md:justify-between rounded-xl border border-stone-200 bg-stone-50/30 p-6 mb-3">
 								<button type="button" class="remove-from-cart cursor-pointer mb-2.5 md:mb-0" data-cart-key="<?php echo esc_attr($cart_item_key); ?>">
 									<svg class="w-6 h-6 md:w-8 md:h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
 										<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -54,14 +54,14 @@ do_action('woocommerce_before_cart');
 										echo $thumbnail;
 										?>
 									</div>
-									<div class="flex-1 mt-2 mb-4 md:my-0 md:mr-2">
+									<div class="flex-1 my-2 md:my-0 md:mr-2">
 										<h3 class="text-2xl text-stone-900 leading-none">
 											<?php echo esc_html($_product->get_name()); ?>
 										</h3>
 										<p class="text-stone-600 text-md my-2">
 											<?php echo wp_kses_post($_product->get_short_description()); ?>
 										</p>
-										<span class="text-lg text-teal-700">
+										<span class="text-xl text-teal-700">
 											<?php echo WC()->cart->get_product_price($_product); ?>
 										</span>
 									</div>
@@ -95,8 +95,8 @@ do_action('woocommerce_before_cart');
 									</button>
 								</div>
 								<div class="flex flex-col items-end justify-end">
-									<p class="text-stone-600 text-lg">Subtotal</p>
-									<span class="text-lg text-stone-900">
+									<p class="text-teal-900 text-lg font-medium">Subtotal</p>
+									<span class="text-lg text-teal-700 font-medium">
 										<?php echo WC()->cart->get_product_subtotal($_product, $cart_item['quantity']); ?>
 									</span>
 								</div>
@@ -120,9 +120,9 @@ do_action('woocommerce_before_cart');
 					<?php do_action('woocommerce_after_cart_table'); ?>
 
 					<!-- Total amount and place order card -->
-					<div class="flex flex-col rounded-xl border border-teal-200 bg-teal-50 p-6">
+					<div class="flex flex-col rounded-xl border border-teal-200 bg-teal-50 p-3">
 							<div class="flex items-center justify-between text-xl">
-								<span class="text-stone-900">Total:</span>
+								<span class="text-stone-900 font-bold">Total:</span>
 								<span class="text-teal-700"><?php echo WC()->cart->get_cart_total(); ?></span>
 							</div>
 							<div class="h-px w-full bg-stone-200 my-4"></div>

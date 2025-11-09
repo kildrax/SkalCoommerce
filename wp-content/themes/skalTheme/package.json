@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --watch",
     "build-prod": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --minify",
-    "dev": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --watch"
+    "dev": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --watch",
+    "clean-js": "terser assets/js/*.js --compress drop_console=true,drop_debugger=true --output assets/js/dist/bundle.min.js"
   },
   "keywords": [
     "wordpress",
@@ -20,7 +21,8 @@
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.10",
-    "@tailwindcss/forms": "^0.5.7"
+    "terser": "^5.44.1"
   }
 }

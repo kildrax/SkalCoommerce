@@ -184,7 +184,7 @@ get_header(); ?>
 
   <!-- Brownies -->
   <section id="brownies" class="mx-auto p-4 mt-8 max-w-7xl">
-    <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Brownies</h2>
+    <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Brownies</h2>
     <!-- Carousel Container -->
     <div class="relative mx-auto">
       <!-- Carousel Wrapper -->
@@ -274,13 +274,13 @@ get_header(); ?>
       </div>
 
       <!-- Desktop Navigation Arrows -->
-      <button class="carousel-prev hidden md:flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200" id="prevBtn">
+      <button class="carousel-prev flex absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="prevBtn">
         <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
       </button>
 
-      <button class="carousel-next hidden md:flex absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200" id="nextBtn">
+      <button class="carousel-next flex absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="nextBtn">
         <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
@@ -320,7 +320,7 @@ get_header(); ?>
 
   <!-- Sirope -->
   <section id="siropes" class="container mx-auto p-4 mt-4 max-w-7xl">
-    <h2 class="text-3xl font-bold mb-8 text-center text-stone-900">Siropes</h2>
+    <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Siropes</h2>
     <!-- Carousel Container -->
     <div class="relative mx-auto">
       <!-- Carousel Wrapper -->
@@ -409,13 +409,13 @@ get_header(); ?>
       </div>
 
       <!-- Desktop Navigation Arrows -->
-      <button class="carousel-prev hidden md:flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200" id="prevBtn">
+      <button class="carousel-prev flex absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="prevBtn">
         <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
       </button>
 
-      <button class="carousel-next hidden md:flex absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200" id="nextBtn">
+      <button class="carousel-next flex absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="nextBtn">
         <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
@@ -550,13 +550,13 @@ get_header(); ?>
       </div>
 
       <!-- Desktop Navigation Arrows -->
-      <button class="carousel-prev hidden md:flex absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200" id="prevBtn">
+      <button class="carousel-prev flex absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="prevBtn">
         <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
       </button>
 
-      <button class="carousel-next hidden md:flex absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-3 shadow-lg transition-all duration-200" id="nextBtn">
+      <button class="carousel-next flex absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="nextBtn">
         <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>

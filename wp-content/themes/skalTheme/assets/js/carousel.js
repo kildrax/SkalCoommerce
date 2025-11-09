@@ -27,9 +27,6 @@ function initCarousel(section, carouselIndex) {
     if (!track || slides.length === 0) return;
     
     let currentSlide = 0;
-    let isDragging = false;
-    let startX = 0;
-    let currentX = 0;
     let autoPlayInterval;
     
     function updateCarousel() {
@@ -105,6 +102,11 @@ function initCarousel(section, carouselIndex) {
         clearInterval(autoPlayInterval);
     }
     
+    function restartAutoPlay() {
+        stopAutoPlay();
+        startAutoPlay();
+    }
+    
     // Auto-play functionality
     startAutoPlay();
     
@@ -112,9 +114,20 @@ function initCarousel(section, carouselIndex) {
     track.addEventListener('mouseenter', stopAutoPlay);
     track.addEventListener('mouseleave', startAutoPlay);
     
-    // Navigation event listeners
-    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    // Navigation event listeners - restart autoplay on interaction
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            restartAutoPlay();
+        });
+    }
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            restartAutoPlay();
+        });
+    }
     
     // Indicator navigation - separate handlers for mobile and desktop
     const desktopIndicators = Array.from(indicators).filter(ind => 
@@ -125,114 +138,25 @@ function initCarousel(section, carouselIndex) {
     );
     
     desktopIndicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => goToSlide(index));
+        indicator.addEventListener('click', () => {
+            goToSlide(index);
+            restartAutoPlay();
+        });
     });
     
     mobileIndicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => goToSlide(index));
+        indicator.addEventListener('click', () => {
+            goToSlide(index);
+            restartAutoPlay();
+        });
     });
     
-    // Touch/drag support for mobile
-    track.addEventListener('touchstart', (e) => {
-        // Don't start dragging if touching interactive elements
-        const target = e.target;
-        if (target.closest('button') || target.closest('input') || target.closest('form') || target.closest('a')) {
-            return;
-        }
-        
-        startX = e.touches[0].clientX;
-        isDragging = true;
-        track.style.transition = 'none';
-        stopAutoPlay();
-    });
-    
-    track.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        currentX = e.touches[0].clientX;
-        const diffX = currentX - startX;
-        const translateX = -currentSlide * 100 + (diffX / track.offsetWidth) * 100;
-        track.style.transform = `translateX(${translateX}%)`;
-    });
-    
-    track.addEventListener('touchend', (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        track.style.transition = 'transform 0.3s ease-in-out';
-        
-        const diffX = currentX - startX;
-        const threshold = track.offsetWidth * 0.2; // 20% threshold
-        
-        if (diffX > threshold) {
-            prevSlide();
-        } else if (diffX < -threshold) {
-            nextSlide();
-        } else {
-            updateCarousel(); // Snap back to current slide
-        }
-        
-        startAutoPlay();
-    });
-    
-    // Mouse drag support for desktop - DISABLED (only mobile touch works)
-    track.addEventListener('mousedown', (e) => {
-        // Disable mouse dragging on desktop
-        const isDesktop = window.innerWidth >= 768;
-        if (isDesktop) return;
-        
-        // Don't start dragging if clicking interactive elements
-        const target = e.target;
-        if (target.closest('button') || target.closest('input') || target.closest('form') || target.closest('a')) {
-            return;
-        }
-        
-        startX = e.clientX;
-        isDragging = true;
-        track.style.transition = 'none';
-        track.style.cursor = 'grabbing';
-        stopAutoPlay();
-    });
-    
-    // Create scoped mouse event handlers for this specific carousel
-    const handleMouseMove = (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        currentX = e.clientX;
-        const diffX = currentX - startX;
-        const translateX = -currentSlide * 100 + (diffX / track.offsetWidth) * 100;
-        track.style.transform = `translateX(${translateX}%)`;
-    };
-    
-    const handleMouseUp = (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        track.style.transition = 'transform 0.3s ease-in-out';
-        track.style.cursor = 'grab';
-        
-        const diffX = currentX - startX;
-        const threshold = track.offsetWidth * 0.2;
-        
-        if (diffX > threshold) {
-            prevSlide();
-        } else if (diffX < -threshold) {
-            nextSlide();
-        } else {
-            updateCarousel();
-        }
-        
-        startAutoPlay();
-        
-        // Remove event listeners after use
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-    };
-    
-    // Add mouse event listeners when dragging starts
-    track.addEventListener('mousedown', () => {
-        if (isDragging) {
-            document.addEventListener('mousemove', handleMouseMove);
-            document.addEventListener('mouseup', handleMouseUp);
-        }
+    // Quantity buttons (+/-) - restart autoplay on interaction
+    const quantityBtns = section.querySelectorAll('.quantity-increase, .quantity-decrease');
+    quantityBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            restartAutoPlay();
+        });
     });
     
     // Handle window resize
@@ -242,10 +166,6 @@ function initCarousel(section, carouselIndex) {
     
     // Initialize
     updateCarousel();
-    
-    // Set cursor based on screen size
-    const isDesktop = window.innerWidth >= 768;
-    track.style.cursor = isDesktop ? 'default' : 'grab';
 }
 
 /**

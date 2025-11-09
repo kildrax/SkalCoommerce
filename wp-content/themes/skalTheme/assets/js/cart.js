@@ -745,24 +745,8 @@ function initAjaxAddToCartSpecial() {
             // Update cart count
             updateCartCount();
             
-            // Show success notification
-            if (notification) {
-                notification.classList.remove('hidden');
-                notification.classList.add('animate-bounce');
-                
-                // Hide notification after 3 seconds
-                setTimeout(() => {
-                    notification.classList.add('hidden');
-                    notification.classList.remove('animate-bounce');
-                }, 3000);
-            }
-            
-            // Reset button
-            button.disabled = false;
-            button.innerHTML = originalText;
-            
-            // Trigger WooCommerce fragments refresh
-            jQuery(document.body).trigger('wc_fragment_refresh');
+            // Redirect to cart page
+            window.location.href = '/carrito/';
         })
         .catch(error => {
             console.error('Error:', error);
