@@ -22,9 +22,9 @@
                 <nav class="hidden md:flex justify-start">
                     <ul class="flex justify-between items-center w-full">
                         <li><a class="text-lg font-roboto" href="<?php echo home_url('/'); ?>">Inicio</a></li>
-                        <li><a class="text-lg font-roboto" href="#brownies">Brownies</a></li>
+                        <li><a class="text-lg font-roboto" href="#browniesBandejas">Brownies</a></li>
+                        <li><a class="text-lg font-roboto" href="#brownies_x4">Brownies x4</a></li>
                         <li><a class="text-lg font-roboto" href="#siropes">Siropes</a></li>
-                        <li><a class="text-lg font-roboto" href="#tortas">Tortas</a></li>
                         <li><a class="text-lg font-roboto" href="#eventos">Eventos</a></li>
                     </ul>
                 </nav>
@@ -72,9 +72,9 @@
                 <nav class="container mx-auto px-4 py-4">
                     <ul class="flex flex-col space-y-3">
                         <li><a class="text-lg font-roboto" href="<?php echo home_url('/'); ?>">Inicio</a></li>
-                        <li><a class="text-lg font-roboto" href="#brownies">Brownies</a></li>
+                        <li><a class="text-lg font-roboto" href="#browniesBandejas">Brownies</a></li>
+                        <li><a class="text-lg font-roboto" href="#brownies_x4">Brownies x4</a></li>
                         <li><a class="text-lg font-roboto" href="#siropes">Siropes</a></li>
-                        <li><a class="text-lg font-roboto" href="#tortas">Tortas</a></li>
                         <li><a class="text-lg font-roboto" href="#eventos">Eventos</a></li>
                     </ul>
                 </nav>

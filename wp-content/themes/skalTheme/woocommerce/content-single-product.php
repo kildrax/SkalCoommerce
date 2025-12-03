@@ -136,36 +136,8 @@ if (post_password_required()) {
                     </div>
                 <?php } ?>
                 <h1 class="text-3xl text-stone-900 mb-4"><?php echo esc_html($product->get_name()); ?></h1>
-                <!-- Rating -->
-                <?php
-                // Get product rating data
-                $average_rating = $product->get_average_rating();
-                $rating_count = $product->get_rating_count();
-                $review_count = $product->get_review_count();
-                ?>
-
-                <div class="items-center space-x-1 my-2.5 hidden">
-                    <!-- Star Rating Display -->
-                    <div class="flex items-center space-x-1">
-                        <?php for ($i = 1; $i <= 5; $i++) : ?>
-                            <svg class="w-4 h-4 <?php echo $i <= $average_rating ? 'text-yellow-300' : 'text-gray-200'; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
-                            </svg>
-                        <?php endfor; ?>
-                    </div>
-
-                    <!-- Rating Text -->
-                    <?php if ($average_rating > 0) : ?>
-                        <span class="text-sm text-gray-600 ml-2">
-                            <?php echo number_format($average_rating, 1); ?>
-                            (<?php echo $review_count; ?> <?php echo $review_count == 1 ? 'reseña' : 'reseñas'; ?>)
-                        </span>
-                    <?php else : ?>
-                        <span class="text-sm text-gray-400 ml-2">Sin reseñas</span>
-                    <?php endif; ?>
-                </div>
                 <div class="flex flex-col text-xl text-teal-700 mb-4 specialPrice"><?php echo $product->get_price_html(); ?></div>
-                <p class="text-stone-600 leading-relaxed mb-6"><?php echo wp_kses_post($product->get_short_description()); ?></p>
+                <div class="text-stone-600 leading-relaxed mb-6 space-y-3"><?php echo wp_kses_post( wpautop( $product->get_description() ) ); ?></div>
             </div>
             <!-- Ingredientes y alergenos -->
             <div class="pb-3">
@@ -261,7 +233,21 @@ if (post_password_required()) {
                 ?>
                     <a href="<?php echo esc_url($related_link); ?>" data-slot="card" class="text-card-foreground flex flex-col gap-6 rounded-xl border overflow-hidden hover:shadow-lg transition-shadow border-stone-200 bg-cream-50 cursor-pointer">
                         <div class="aspect-[4/3] overflow-hidden">
-                            <img src="<?php echo esc_url($related_image_url); ?>" alt="<?php echo esc_attr($related_title); ?>" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                            <?php if ($related_image_id) : ?>
+                                <?php echo wp_get_attachment_image(
+                                    $related_image_id,
+                                    'medium_large',
+                                    false,
+                                    array(
+                                        'class' => 'w-full h-full object-cover hover:scale-105 transition-transform duration-300',
+                                        'alt' => esc_attr($related_title),
+                                        'loading' => 'lazy',
+                                        'sizes' => '(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw'
+                                    )
+                                ); ?>
+                            <?php else : ?>
+                                <img src="<?php echo esc_url($related_image_url); ?>" alt="<?php echo esc_attr($related_title); ?>" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                            <?php endif; ?>
                         </div>
                         <div data-slot="card-header" class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 pt-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6 pb-2">
                             <div class="flex items-start justify-between gap-2">
@@ -292,7 +278,7 @@ if (post_password_required()) {
                             <?php endif; ?>
                         </div>
                         <div data-slot="card-footer" class="px-6 pb-6 [.border-t]:pt-6 flex items-center justify-between pt-0">
-                            <span class="text-lg text-teal-700"><?php echo $related_price; ?></span>
+                            <div class="flex flex-col text-xl text-teal-700 my-2 specialPrice"><?php echo $related_price; ?></div>
                             <button data-slot="button" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 h-8 rounded-md gap-1.5 px-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white">
                                 Agregar al carrito
                             </button>

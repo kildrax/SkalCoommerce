@@ -58,7 +58,15 @@ do_action('woocommerce_before_cart');
 										<h3 class="text-2xl text-stone-900 leading-none">
 											<?php echo esc_html($_product->get_name()); ?>
 										</h3>
-										<p class="text-stone-600 text-md my-2">
+										<span data-slot="badge" class="inline-flex items-center justify-center rounded-md border px-2 my-2 py-0.5 font-medium w-fit whitespace-nowrap text-sm text-teal-700 border-teal-200 bg-teal-50">
+											<?php
+												$cart_categories = get_the_terms($product_id, 'product_cat');
+												if ($cart_categories && ! is_wp_error($cart_categories)) {
+													echo esc_html($cart_categories[0]->name);
+												}
+											?>
+										</span>
+										<p class="text-stone-600 text-md">
 											<?php echo wp_kses_post($_product->get_short_description()); ?>
 										</p>
 										<span class="text-xl text-teal-700">

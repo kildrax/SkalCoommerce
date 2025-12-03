@@ -182,9 +182,9 @@ get_header(); ?>
   </div>
   <?php endif; ?>
 
-  <!-- Brownies -->
-  <section id="brownies" class="mx-auto p-4 mt-8 max-w-7xl">
-    <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Brownies</h2>
+  <!-- Brownies Bandejas-->
+  <section id="browniesBandejas" class="mx-auto p-4 mt-8 max-w-7xl">
+    <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Brownies bandejas</h2>
     <!-- Carousel Container -->
     <div class="relative mx-auto">
       <!-- Carousel Wrapper -->
@@ -196,7 +196,7 @@ get_header(); ?>
           $products = wc_get_products([
             'status' => 'publish',
             'limit'  => -1, // Get all products
-            'category' => ['brownies'],
+            'category' => ['brownies_bandejas'],
           ]);
 
           if ($products) :
@@ -215,33 +215,6 @@ get_header(); ?>
                       <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
                       <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
                     </a>
-                    <?php
-                    // Get product rating data
-                    $average_rating = $product->get_average_rating();
-                    $rating_count = $product->get_rating_count();
-                    $review_count = $product->get_review_count();
-                    ?>
-
-                    <div class="hidden items-center space-x-1 my-2.5">
-                      <!-- Star Rating Display -->
-                      <div class="flex items-center space-x-1">
-                        <?php for ($i = 1; $i <= 5; $i++) : ?>
-                          <svg class="w-4 h-4 <?php echo $i <= $average_rating ? 'text-yellow-300' : 'text-gray-200'; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
-                          </svg>
-                        <?php endfor; ?>
-                      </div>
-
-                      <!-- Rating Text -->
-                      <?php if ($average_rating > 0) : ?>
-                        <span class="text-sm text-gray-600 ml-2">
-                          <?php echo number_format($average_rating, 1); ?>
-                          (<?php echo $review_count; ?> <?php echo $review_count == 1 ? 'reseña' : 'reseñas'; ?>)
-                        </span>
-                      <?php else : ?>
-                        <span class="text-sm text-gray-400 ml-2">Sin reseñas</span>
-                      <?php endif; ?>
-                    </div>
 
                     <div class="flex flex-col text-xl text-teal-700 my-2 specialPrice"><?php echo $product->get_price_html(); ?></div>
 
@@ -318,7 +291,124 @@ get_header(); ?>
     </div>
   </section>
 
-  <!-- Sirope -->
+  <!-- Brownies x4 -->
+  <section id="brownies_x4" class="container mx-auto p-4 mt-4 max-w-7xl">
+    <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Brownies x4</h2>
+    <!-- Carousel Container -->
+    <div class="relative mx-auto">
+      <!-- Carousel Wrapper -->
+      <div class="carousel-container overflow-hidden rounded-lg md:rounded-none bg-white md:bg-transparent">
+        <div class="carousel-track flex transition-transform duration-300 ease-in-out" id="carouselTrack">
+
+          <?php
+          // Get products from brownies category
+          $products = wc_get_products([
+            'status' => 'publish',
+            'limit'  => -1, // Get all products
+            'category' => ['brownies_x4'],
+          ]);
+
+          if ($products) :
+            foreach ($products as $product) :
+              $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'full');
+              $image_url = $product_image ? $product_image[0] : wc_placeholder_img_src();
+          ?>
+              <!-- Product Slide -->
+              <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
+                <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
+                  <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                  </a>
+                  <div class="px-4 pb-4">
+                    <a href="<?php echo esc_url($product->get_permalink()); ?>">
+                      <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
+                      <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
+                    </a>
+                   
+                    <div class="flex flex-col text-xl text-teal-700 my-2 specialPrice"><?php echo $product->get_price_html(); ?></div>
+
+                    <form class="cart ajax-add-to-cart flex items-center justify-between" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
+                      <div class="relative flex items-center max-w-[8rem] h-8 my-2.5">
+                        <button type="button" class="quantity-decrease bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2.5 h-full focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                          <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                          </svg>
+                        </button>
+                        <input type="number" name="quantity" class="quantity-input bg-gray-50 border-x-0 border-gray-300 h-full text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full appearance-none" value="1" min="1" />
+                        <button type="button" class="quantity-increase bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2.5 h-full focus:ring-gray-100 focus:ring-2 focus:outline-none">
+                          <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <button type="submit" class="single_add_to_cart_button bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white px-4 py-2 rounded-md">Agregar al carrito</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+          <?php
+            endforeach;
+          endif;
+          ?>
+
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Arrows -->
+      <button class="carousel-prev flex absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="prevBtn">
+        <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+
+      <button class="carousel-next flex absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="nextBtn">
+        <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+
+      <!-- Bullet Indicators -->
+      <div class="flex justify-center mt-6 space-x-2" id="indicators">
+        <?php
+        if ($products) :
+          $product_count = count($products);
+          // Desktop: show indicators for pages (groups of 3)
+          // Mobile: show indicators for each product
+        ?>
+          <!-- Desktop indicators (hidden on mobile) -->
+          <div class="hidden md:flex space-x-2">
+            <?php
+            $desktop_pages = max(1, $product_count - 2); // Number of "pages" on desktop
+            for ($i = 0; $i < $desktop_pages; $i++) :
+            ?>
+              <button class="indicator w-3 h-3 rounded-full bg-stone-400 hover:bg-stone-600 transition-colors duration-200 <?php echo $i === 0 ? 'active bg-stone-600' : ''; ?>" data-slide="<?php echo $i; ?>"></button>
+            <?php endfor; ?>
+          </div>
+
+          <!-- Mobile indicators (hidden on desktop) -->
+          <div class="flex md:hidden space-x-2">
+            <?php foreach ($products as $index => $product) : ?>
+              <button class="indicator w-3 h-3 rounded-full bg-stone-400 hover:bg-stone-600 transition-colors duration-200 <?php echo $index === 0 ? 'active bg-stone-600' : ''; ?>" data-slide="<?php echo $index; ?>"></button>
+            <?php endforeach; ?>
+          </div>
+        <?php
+        endif;
+        ?>
+      </div>
+
+    </div>
+  </section>
+
+    <!-- Sirope -->
+  <?php
+    $siropes = wc_get_products(array(
+      'status' => 'publish',
+      'limit'  => -1,
+      'category' => array('siropes'),
+    ));
+    if (!empty($siropes)) :
+  ?>
   <section id="siropes" class="container mx-auto p-4 mt-4 max-w-7xl">
     <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Siropes</h2>
     <!-- Carousel Container -->
@@ -328,15 +418,8 @@ get_header(); ?>
         <div class="carousel-track flex transition-transform duration-300 ease-in-out" id="carouselTrack">
 
           <?php
-          // Get products from brownies category
-          $products = wc_get_products([
-            'status' => 'publish',
-            'limit'  => -1, // Get all products
-            'category' => ['siropes'],
-          ]);
-
-          if ($products) :
-            foreach ($products as $product) :
+          if ($siropes) :
+            foreach ($siropes as $product) :
               $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'full');
               $image_url = $product_image ? $product_image[0] : wc_placeholder_img_src();
           ?>
@@ -351,34 +434,8 @@ get_header(); ?>
                       <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
                       <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
                     </a>
-                    <?php
-                    // Get product rating data
-                    $average_rating = $product->get_average_rating();
-                    $rating_count = $product->get_rating_count();
-                    $review_count = $product->get_review_count();
-                    ?>
-
-                    <div class="hidden items-center space-x-1 my-2.5">
-                      <!-- Star Rating Display -->
-                      <div class="flex items-center space-x-1">
-                        <?php for ($i = 1; $i <= 5; $i++) : ?>
-                          <svg class="w-4 h-4 <?php echo $i <= $average_rating ? 'text-yellow-300' : 'text-gray-200'; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
-                          </svg>
-                        <?php endfor; ?>
-                      </div>
-
-                      <!-- Rating Text -->
-                      <?php if ($average_rating > 0) : ?>
-                        <span class="text-sm text-gray-600 ml-2">
-                          <?php echo number_format($average_rating, 1); ?>
-                          (<?php echo $review_count; ?> <?php echo $review_count == 1 ? 'reseña' : 'reseñas'; ?>)
-                        </span>
-                      <?php else : ?>
-                        <span class="text-sm text-gray-400 ml-2">Sin reseñas</span>
-                      <?php endif; ?>
-                    </div>
-                    <p class="text-xl text-teal-700 font-bold"><?php echo $product->get_price_html(); ?></p>
+                   
+                    <div class="flex flex-col text-xl text-teal-700 my-2 specialPrice"><?php echo $product->get_price_html(); ?></div>
 
                     <form class="cart ajax-add-to-cart flex items-center justify-between" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
                       <div class="relative flex items-center max-w-[8rem] h-8 my-2.5">
@@ -424,8 +481,8 @@ get_header(); ?>
       <!-- Bullet Indicators -->
       <div class="flex justify-center mt-6 space-x-2" id="indicators">
         <?php
-        if ($products) :
-          $product_count = count($products);
+        if ($siropes) :
+          $product_count = count($siropes);
           // Desktop: show indicators for pages (groups of 3)
           // Mobile: show indicators for each product
         ?>
@@ -441,7 +498,7 @@ get_header(); ?>
 
           <!-- Mobile indicators (hidden on desktop) -->
           <div class="flex md:hidden space-x-2">
-            <?php foreach ($products as $index => $product) : ?>
+            <?php foreach ($siropes as $index => $product) : ?>
               <button class="indicator w-3 h-3 rounded-full bg-stone-400 hover:bg-stone-600 transition-colors duration-200 <?php echo $index === 0 ? 'active bg-stone-600' : ''; ?>" data-slide="<?php echo $index; ?>"></button>
             <?php endforeach; ?>
           </div>
@@ -452,147 +509,7 @@ get_header(); ?>
 
     </div>
   </section>
-
-  <!-- Tortas -->
-  <section id="tortas" class="container mx-auto p-4 mt-4 max-w-7xl">
-    <h2 class="text-3xl font-bold mb-4 text-center text-stone-900">Tortas</h2>
-    <!-- Total amount and place order card -->
-    <div class="flex flex-col rounded-xl border border-orange-500 bg-orange-50 p-2 mb-4 md:w-3/4 w-[97%] mx-auto">
-      <div class="flex items-center justify-center text-md text-stone-900">
-        <p><span class="font-bold">Importante:</span> Las tortas necesitan 3 días de anticipación para su debida elaboración</p>
-      </div>
-    </div>
-    <!-- Carousel Container -->
-    <div class="relative mx-auto">
-      <!-- Carousel Wrapper -->
-      <div class="carousel-container overflow-hidden rounded-lg md:rounded-none bg-white md:bg-transparent">
-        <div class="carousel-track flex transition-transform duration-300 ease-in-out" id="carouselTrack">
-
-          <?php
-          // Get products from brownies category
-          $products = wc_get_products([
-            'status' => 'publish',
-            'limit'  => -1, // Get all products
-            'category' => ['tortas'],
-          ]);
-
-          if ($products) :
-            foreach ($products as $product) :
-              $product_image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'full');
-              $image_url = $product_image ? $product_image[0] : wc_placeholder_img_src();
-          ?>
-              <!-- Product Slide -->
-              <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
-                <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
-                  <a href="<?php echo esc_url($product->get_permalink()); ?>">
-                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
-                  </a>
-                  <div class="px-4 pb-4">
-                    <a href="<?php echo esc_url($product->get_permalink()); ?>">
-                      <h3 class="text-2xl font-bold text-stone-800 leading-tight mb-2 mt-6"><?php echo esc_html($product->get_name()); ?></h3>
-                      <p class="text-stone-600"><?php echo wp_trim_words($product->get_short_description(), 20); ?></p>
-                    </a>
-                    <?php
-                    // Get product rating data
-                    $average_rating = $product->get_average_rating();
-                    $rating_count = $product->get_rating_count();
-                    $review_count = $product->get_review_count();
-                    ?>
-
-                    <div class="hidden items-center space-x-1 my-2.5">
-                      <!-- Star Rating Display -->
-                      <div class="flex items-center space-x-1">
-                        <?php for ($i = 1; $i <= 5; $i++) : ?>
-                          <svg class="w-4 h-4 <?php echo $i <= $average_rating ? 'text-yellow-300' : 'text-gray-200'; ?>" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
-                          </svg>
-                        <?php endfor; ?>
-                      </div>
-
-                      <!-- Rating Text -->
-                      <?php if ($average_rating > 0) : ?>
-                        <span class="text-sm text-gray-600 ml-2">
-                          <?php echo number_format($average_rating, 1); ?>
-                          (<?php echo $review_count; ?> <?php echo $review_count == 1 ? 'reseña' : 'reseñas'; ?>)
-                        </span>
-                      <?php else : ?>
-                        <span class="text-sm text-gray-400 ml-2">Sin reseñas</span>
-                      <?php endif; ?>
-                    </div>
-                    <p class="text-xl text-teal-700 font-bold"><?php echo $product->get_price_html(); ?></p>
-
-                    <form class="cart ajax-add-to-cart flex items-center justify-between" data-product-id="<?php echo esc_attr($product->get_id()); ?>">
-                      <div class="relative flex items-center max-w-[8rem] h-8 my-2.5">
-                        <button type="button" class="quantity-decrease bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-s-lg px-2.5 h-full focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                          <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
-                          </svg>
-                        </button>
-                        <input type="number" name="quantity" class="quantity-input bg-gray-50 border-x-0 border-gray-300 h-full text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full appearance-none" value="1" min="1" />
-                        <button type="button" class="quantity-increase bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-e-lg px-2.5 h-full focus:ring-gray-100 focus:ring-2 focus:outline-none">
-                          <svg class="w-3 h-3 text-gray-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-                          </svg>
-                        </button>
-                      </div>
-
-                      <button type="submit" class="single_add_to_cart_button bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white px-4 py-2 rounded-md">Agregar al carrito</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-          <?php
-            endforeach;
-          endif;
-          ?>
-
-        </div>
-      </div>
-
-      <!-- Desktop Navigation Arrows -->
-      <button class="carousel-prev flex absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="prevBtn">
-        <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-      </button>
-
-      <button class="carousel-next flex absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 md:p-3 shadow-lg transition-all duration-200" id="nextBtn">
-        <svg class="w-6 h-6 text-stone-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-        </svg>
-      </button>
-
-      <!-- Bullet Indicators -->
-      <div class="flex justify-center mt-6 space-x-2" id="indicators">
-        <?php
-        if ($products) :
-          $product_count = count($products);
-          // Desktop: show indicators for pages (groups of 3)
-          // Mobile: show indicators for each product
-        ?>
-          <!-- Desktop indicators (hidden on mobile) -->
-          <div class="hidden md:flex space-x-2">
-            <?php
-            $desktop_pages = max(1, $product_count - 2); // Number of "pages" on desktop
-            for ($i = 0; $i < $desktop_pages; $i++) :
-            ?>
-              <button class="indicator w-3 h-3 rounded-full bg-stone-400 hover:bg-stone-600 transition-colors duration-200 <?php echo $i === 0 ? 'active bg-stone-600' : ''; ?>" data-slide="<?php echo $i; ?>"></button>
-            <?php endfor; ?>
-          </div>
-
-          <!-- Mobile indicators (hidden on desktop) -->
-          <div class="flex md:hidden space-x-2">
-            <?php foreach ($products as $index => $product) : ?>
-              <button class="indicator w-3 h-3 rounded-full bg-stone-400 hover:bg-stone-600 transition-colors duration-200 <?php echo $index === 0 ? 'active bg-stone-600' : ''; ?>" data-slide="<?php echo $index; ?>"></button>
-            <?php endforeach; ?>
-          </div>
-        <?php
-        endif;
-        ?>
-      </div>
-
-    </div>
-  </section>
+  <?php endif; ?>
 
   <!-- Eventos -->
   <?php while (have_posts()) : the_post(); ?>
