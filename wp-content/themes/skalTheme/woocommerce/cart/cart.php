@@ -23,7 +23,12 @@ do_action('woocommerce_before_cart');
 		<form class="woocommerce-cart-form" action="<?php echo esc_url(wc_get_cart_url()); ?>" method="post">
 			<?php do_action('woocommerce_before_cart_table'); ?>
 			<section class="">
-				<div class="container mx-auto p-4 py-12 max-w-4xl">
+				<div class="container mx-auto p-4 pt-8 pb-12 max-w-4xl">
+
+					<div class="flex flex-col items-center justify-between mb-4 bg-white px-6 py-4 rounded-xl border border-orange-500">
+						<h4 class="text-orange-500 font-semibold">Importante</h4>
+						<p class="text-stone-600 text-md">Los pedidos se preparan completamente desde cero y con toda nuestra dedicación. Por eso, el tiempo de entrega es de <span class="text-orange-500 font-semibold">3 días</span> a partir de la fecha de compra.</p> 
+					</div>
 
 					<?php
 					// Loop through cart items

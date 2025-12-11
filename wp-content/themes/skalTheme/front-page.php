@@ -100,21 +100,21 @@ get_header(); ?>
                     <div class="text-4xl flex-shrink-0">🎁</div>
                     <div>
                       <h4 class="text-lg text-white mb-1">Caja de Brownies Navideño</h4>
-                      <p class="text-white opacity-80 text-sm">Caja de brownies navideño con 6 brownies de diferentes sabores</p>
+                      <p class="text-white opacity-80 text-sm">Caja de brownies navideño con 4 brownies de sabores únicos de temporada</p>
                     </div>
                   </div>
                   <div class="flex items-start space-x-4 bg-white/10 rounded-xl p-4 border border-white/10" style="opacity: 1; transform: none;">
                     <div class="text-4xl flex-shrink-0">📜</div>
                     <div>
-                      <h4 class="text-lg text-white mb-1">Tarjeta con Receta Navideña</h4>
-                      <p class="text-white opacity-80 text-sm">Tarjeta con receta navideña con mensaje de "Feliz Navidad"</p>
+                      <h4 class="text-lg text-white mb-1">Tarjeta Navideña</h4>
+                      <p class="text-white opacity-80 text-sm">Tarjeta navideña con mensaje de "Feliz Navidad"</p>
                     </div>
                   </div>
                   <div class="flex items-start space-x-4 bg-white/10 rounded-xl p-4 border border-white/10" style="opacity: 1; transform: none;">
                     <div class="text-4xl flex-shrink-0">🍯</div>
                     <div>
                       <h4 class="text-lg text-white mb-1">Botella de Syrup Artesanal</h4>
-                      <p class="text-white opacity-80 text-sm">Botella de syrup artesanal para el perfecto final de receta</p>
+                      <p class="text-white opacity-80 text-sm">Botella de syrup artesanal como perfecto acompañamiento</p>
                     </div>
                   </div>
                 </div>
