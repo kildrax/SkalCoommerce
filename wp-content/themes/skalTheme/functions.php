@@ -367,6 +367,16 @@ function skal_process_custom_order()
 
         // Save the order
         $order->save();
+        
+        // Manually trigger the new order email after the order is fully saved
+        if (function_exists('WC')) {
+            $mailer = WC()->mailer();
+            if (isset($mailer->emails['WC_Email_New_Order'])) {
+                // Force reload the order to ensure all data is available
+                $order = wc_get_order($order->get_id());
+                $mailer->emails['WC_Email_New_Order']->trigger($order->get_id());
+            }
+        }
 
         // Register order with WooCommerce Analytics
         if (function_exists('wc_admin_record_order')) {
