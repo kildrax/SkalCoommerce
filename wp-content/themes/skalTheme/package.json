@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --watch",
-    "build-prod": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --minify",
-    "dev": "tailwindcss -i ./style.css -o ./assets/css/tailwind.css --watch",
+    "build": "tailwindcss -i ./style.css -o ./assets/css/tailwind.min.css --watch",
+    "build-prod": "tailwindcss -i ./style.css -o ./assets/css/tailwind.min.css --minify",
+    "dev": "tailwindcss -i ./style.css -o ./assets/css/tailwind.min.css --watch",
     "clean-js": "terser assets/js/*.js --compress drop_console=true,drop_debugger=true --output assets/js/dist/bundle.min.js"
   },
   "keywords": [

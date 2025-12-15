@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <meta name="keywords" content="Skål, Skal, brownies, brownies artesanales, brownies gourmet, brownies a domicilio, tienda de brownies, cajas de brownies, brownies para regalar, brownies x4, brownies en bandeja, postres artesanales, repostería artesanal, pastelería online, regalos dulces, siropes, sirope artesanal, syrup artesanal, siropes para postres, postres gourmet, catering de postres, catering para eventos, tienda online de postres, dulces artesanales, eventos, regalo de navidad, combo, combo de brownies, brownies navideños, bandeja de brownies, tortas, tortas personalizadas, tortas de cumpleaños, tortas de boda, tortas de graduación, tortas de bautismo, brownie red velvet, brownie arequipe, brownie chocolate, brookies, brownie vegano, brownie tradicional, brownie bajo en azucar, brownie sin gluten, brownie sin lactosa, blondie chocolate y arandanos, blondie chocolate blanco y glaseado de limón">
+    <link rel="canonical" href="<?php echo home_url(); ?>">
     <?php wp_head(); ?>
 </head>
 
@@ -45,14 +47,14 @@
                 <div class="flex justify-end">
                     <ul class="flex justify-between items-center">
                         <!-- <li>
-                            <a class="block mr-2" href="<?php echo wp_login_url(); ?>" noreel="noopener">
+                            <a class="block mr-2" href="<?php echo wp_login_url(); ?>" rel="noopener">
                                 <svg class="w-10 h-10 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                 </svg>
                             </a>
                         </li> -->
                         <li>
-                            <a href="<?php echo wc_get_cart_url(); ?>" class="relative" noreel="noopener">
+                            <a href="<?php echo wc_get_cart_url(); ?>" class="relative" rel="noopener">
                                 <svg class="w-10 h-10 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312" />
                                 </svg>

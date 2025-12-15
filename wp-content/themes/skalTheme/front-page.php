@@ -19,7 +19,7 @@ get_header(); ?>
         </div>
       </div>
 
-      <img class="md:w-1/2 object-cover hidden md:block" src="<?php the_field('imagen_banner'); ?>" />
+      <img class="md:w-1/2 object-cover hidden md:block" src="<?php the_field('imagen_banner'); ?>" alt="<?php the_field('titulo_banner'); ?>" fetchpriority="high" loading="eager" />
     </section>
   <?php endwhile; ?>
 
@@ -67,7 +67,7 @@ get_header(); ?>
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div class="relative">
               <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20">
-                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product_name); ?>" class="w-full aspect-square object-cover">
+                <img src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product_name); ?>" class="w-full aspect-square object-cover" loading="lazy">
               </div>
               <div class="absolute -top-4 -left-4 animate-sparkle-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles h-12 w-12 text-white drop-shadow-lg" aria-hidden="true">
@@ -107,7 +107,7 @@ get_header(); ?>
                     <div class="text-4xl flex-shrink-0">📜</div>
                     <div>
                       <h4 class="text-lg text-white mb-1">Tarjeta Navideña</h4>
-                      <p class="text-white opacity-80 text-sm">Tarjeta navideña con mensaje de "Feliz Navidad"</p>
+                      <p class="text-white opacity-80 text-sm">Tarjeta navideña con mensaje especial de Skål</p>
                     </div>
                   </div>
                   <div class="flex items-start space-x-4 bg-white/10 rounded-xl p-4 border border-white/10" style="opacity: 1; transform: none;">
@@ -208,7 +208,7 @@ get_header(); ?>
               <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
                 <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
                   <a href="<?php echo esc_url($product->get_permalink()); ?>">
-                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>" loading="lazy">
                   </a>
                   <div class="px-4 pb-4">
                     <a href="<?php echo esc_url($product->get_permalink()); ?>">
@@ -317,7 +317,7 @@ get_header(); ?>
               <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
                 <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
                   <a href="<?php echo esc_url($product->get_permalink()); ?>">
-                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>" loading="lazy">
                   </a>
                   <div class="px-4 pb-4">
                     <a href="<?php echo esc_url($product->get_permalink()); ?>">
@@ -427,7 +427,7 @@ get_header(); ?>
               <div class="carousel-slide min-w-full md:min-w-[400px] md:max-w-[400px] md:flex-shrink-0 md:px-2">
                 <div class="md:bg-white md:rounded-lg md:overflow-hidden md:h-full">
                   <a href="<?php echo esc_url($product->get_permalink()); ?>">
-                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>">
+                    <img class="w-full h-80 object-cover mb-4 md:mb-0" src="<?php echo esc_url($image_url); ?>" alt="<?php echo esc_attr($product->get_name()); ?>" loading="lazy">
                   </a>
                   <div class="px-4 pb-4">
                     <a href="<?php echo esc_url($product->get_permalink()); ?>">

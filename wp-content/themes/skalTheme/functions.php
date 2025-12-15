@@ -26,9 +26,9 @@ add_action('after_setup_theme', 'myshop_setup');
 function myshop_enqueue_scripts()
 {
     // Enqueue Tailwind CSS
-    $css_file = get_template_directory() . '/assets/css/tailwind.css';
+    $css_file = get_template_directory() . '/assets/css/tailwind.min.css';
     if (file_exists($css_file)) {
-        wp_enqueue_style('myshop-tailwind', get_template_directory_uri() . '/assets/css/tailwind.css', array(), filemtime($css_file));
+        wp_enqueue_style('myshop-tailwind', get_template_directory_uri() . '/assets/css/tailwind.min.css', array(), filemtime($css_file));
     }
 
     // Enqueue JavaScript minify
@@ -151,9 +151,9 @@ function refresh_cart_count()
 
 // Enqueue Tailwind also for Gutenberg editor
 add_action('enqueue_block_editor_assets', function () {
-    $css_file = get_template_directory() . '/assets/css/tailwind.css';
+    $css_file = get_template_directory() . '/assets/css/tailwind.min.css';
     if (file_exists($css_file)) {
-        wp_enqueue_style('myshop-editor', get_template_directory_uri() . '/assets/css/tailwind.css', array(), filemtime($css_file));
+        wp_enqueue_style('myshop-editor', get_template_directory_uri() . '/assets/css/tailwind.min.css', array(), filemtime($css_file));
     }
 });
 
