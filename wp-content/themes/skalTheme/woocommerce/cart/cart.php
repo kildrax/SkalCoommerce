@@ -165,13 +165,13 @@ do_action('woocommerce_before_cart');
 						<!-- Nombre -->
 						<div>
 							<label for="customer-nombre" class="block text-sm font-medium text-stone-700 mb-1">Nombre</label>
-							<input type="text" id="customer-nombre" name="nombre" maxlength="30" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+							<input type="text" id="customer-nombre" name="nombre" maxlength="30" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
 						</div>
 
 						<!-- Apellido -->
 						<div>
 							<label for="customer-apellido" class="block text-sm font-medium text-stone-700 mb-1">Apellido</label>
-							<input type="text" id="customer-apellido" name="apellido" maxlength="30" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+							<input type="text" id="customer-apellido" name="apellido" maxlength="30" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ ]+$" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
 						</div>
 
 						<!-- Celular -->
@@ -206,12 +206,13 @@ do_action('woocommerce_before_cart');
 								<option value="Ciudad Bolívar">Ciudad Bolívar</option>
 								<option value="Sumapaz">Sumapaz</option>
 							</select>
+							<p class="text-xs text-stone-500 mt-1">Por ahora solo hacemos domicilios en las zonas que encuentras en la lista.</p>
 						</div>
 
 						<!-- Dirección -->
 						<div>
 							<label for="customer-direccion" class="block text-sm font-medium text-stone-700 mb-1">Dirección</label>
-							<textarea id="customer-direccion" name="direccion" rows="3" maxlength="100" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"></textarea>
+							<textarea id="customer-direccion" name="direccion" rows="3" maxlength="100" placeholder="Verifica que la dirección sea correcta para que tu pedido llegue sin problemas" required class="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"></textarea>
 						</div>
 
 						<!-- Tratamiento de datos personales -->
